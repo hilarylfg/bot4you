@@ -1,0 +1,40 @@
+@use 'helpers/index' as *;
+
+body {
+    font-size: rem(16);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter, sans-serif;
+    color: var(--color-light);
+    background: var(--color-bg-1);
+}
+
+a {
+    color: inherit;
+
+    //@include hover {
+    //    color: var(--color-accent);
+    //}
+
+    &[class] {
+        text-decoration: none;
+    }
+}
+
+//:focus-visible {
+//    outline: rem(2) dashed var(--color-light);
+//    outline-offset: rem(4);
+//    transition-duration: 0s !important;
+//}
+
+a,
+button {
+    &[aria-label] {
+        position: relative;
+    }
+}
+
+svg.lucide {
+    fill: none;
+}
