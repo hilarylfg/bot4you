@@ -1,14 +1,8 @@
 @use 'helpers/index' as *;
 
 :root {
-  --color-light: #ebeef3;
-  --color-dark: #141414;
-
-  --color-text-neutral: #acb4c0;
-
-  --color-bg-1: #141828;
-  --color-card-bg-1: #23283d;
-  --color-br-1: #4b5268;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
 
   --transition-duration: 0.2s;
   --transition-duration-fastest: 0.1s;

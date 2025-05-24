@@ -1,0 +1,76 @@
+:root {
+    // Основные фоны
+    --bg-primary: #ffffff;
+    --bg-secondary: #f7f7f8;
+    --bg-tertiary: #ececf1;
+
+    // Текст
+    --text-primary: #353740;
+    --text-secondary: #6e6e80;
+    --text-muted: #8e8ea0;
+    --text-inverse: #ffffff;
+
+    // Акценты
+    --accent-primary: #8b5cf6;
+    --accent-primary-hover: #7c3aed;
+    --accent-secondary: #06b6d4;
+    --accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+
+    // Границы
+    --border-light: #e5e5e5;
+    --border-medium: #d1d5db;
+
+    // Состояния
+    --success: #10a37f;
+    --warning: #ff8c42;
+    --error: #ef4444;
+    --info: #3b82f6;
+
+    // Тени
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] {
+    // Основные фоны
+    --bg-primary: #212121;
+    --bg-secondary: #2f2f2f;
+    --bg-tertiary: #404040;
+
+    // Текст
+    --text-primary: #ececf1;
+    --text-secondary: #c5c5d2;
+    --text-muted: #9ca3af;
+
+    // Границы
+    --border-light: #374151;
+    --border-medium: #4b5563;
+
+    // Тени
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg-primary: #212121;
+        --bg-secondary: #2f2f2f;
+        --bg-tertiary: #404040;
+
+        --text-primary: #ececf1;
+        --text-secondary: #c5c5d2;
+        --text-muted: #9ca3af;
+
+        --border-light: #374151;
+        --border-medium: #4b5563;
+
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+    }
+}

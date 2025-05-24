@@ -2,9 +2,11 @@
 @use 'variables';
 @use 'utils';
 @use 'globals';
+@use 'themes';
 
 @use 'ui/button';
 
 @use 'pages/home';
 
 @use 'components/prompt-box';
+@use 'components/theme-switch';

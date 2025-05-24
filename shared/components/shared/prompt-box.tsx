@@ -1,20 +1,37 @@
 "use client";
 
-import {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {Send} from "lucide-react";
+import {Dispatch, FormEvent, SetStateAction, useState, KeyboardEvent as ReactKeyboardEvent} from "react";
+import {Button} from "@/shared/components";
 
 interface Props {
     setIsLoading: Dispatch<SetStateAction<boolean>>;
     setError: Dispatch<SetStateAction<string | null>>;
     setResponse: Dispatch<SetStateAction<string>>;
     isLoading: boolean;
+    onMessageSubmit?: (message: string) => void;
+    onResponseTimeSet?: (time: Date) => void;
 }
 
-export function PromptBox({setIsLoading, setError, setResponse, isLoading}: Props) {
+export function PromptBox({
+                              setIsLoading,
+                              setError,
+                              setResponse,
+                              isLoading,
+                              onMessageSubmit,
+                              onResponseTimeSet
+                          }: Props) {
     const [message, setMessage] = useState<string>("");
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!message.trim()) return;
+
+        const requestTime = new Date();
+
+        if (onMessageSubmit) {
+            onMessageSubmit(message);
+        }
 
         setIsLoading(true);
         setError(null);
@@ -80,6 +97,21 @@ export function PromptBox({setIsLoading, setError, setResponse, isLoading}: Prop
             console.error(err);
         } finally {
             setIsLoading(false);
+
+            if (onResponseTimeSet) {
+                onResponseTimeSet(requestTime);
+            }
+        }
+
+        setMessage("");
+    };
+
+    const handleKeyDown = (e: ReactKeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (!isLoading && message.trim()) {
+                void handleSubmit(e as unknown as FormEvent);
+            }
         }
     };
 
@@ -90,6 +122,7 @@ export function PromptBox({setIsLoading, setError, setResponse, isLoading}: Prop
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="prompt-box__textarea"
+                onKeyDown={handleKeyDown}
                 rows={4}
                 disabled={isLoading}
                 placeholder="Введите ваш вопрос здесь..."
@@ -98,13 +131,13 @@ export function PromptBox({setIsLoading, setError, setResponse, isLoading}: Prop
             <hr className="prompt-box__hr"/>
 
             <div className="prompt-box__buttons">
-                <button
+                <Button
                     type="submit"
                     disabled={isLoading || !message.trim()}
                     className="prompt-box__button"
                 >
-                    {isLoading ? "Обрабатываем..." : "Отправить"}
-                </button>
+                    {isLoading ? "Обрабатываем..." : <> <Send size={16}/>Отправить</>}
+                </Button>
             </div>
         </form>
     )

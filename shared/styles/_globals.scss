@@ -5,9 +5,9 @@ body {
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    font-family: Inter, sans-serif;
-    color: var(--color-light);
-    background: var(--color-bg-1);
+    font-family: var(--font-nunito), sans-serif;
+    color: var(--text-primary);
+    background: var(--bg-primary);
 }
 
 a {

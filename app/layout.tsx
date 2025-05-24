@@ -1,16 +1,13 @@
 import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
+import {Nunito} from "next/font/google";
 import {ReactNode} from "react";
 import "@/shared/styles/main.css";
+import {ThemeSwitch} from "@/shared/components";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+const nunito = Nunito({
+    subsets: ['cyrillic'],
+    variable: '--font-nunito',
+    weight: ['500', '600', '700', '900'],
 });
 
 export const metadata: Metadata = {
@@ -21,9 +18,10 @@ export const metadata: Metadata = {
 export default function RootLayout({children,}: Readonly<{ children: ReactNode; }>) {
     return (
         <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                {children}
-            </body>
+        <body className={nunito.variable}>
+        <ThemeSwitch/>
+        {children}
+        </body>
         </html>
     );
 }
