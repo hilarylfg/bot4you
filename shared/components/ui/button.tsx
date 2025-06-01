@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 
-type ButtonVariant = 'default' | 'destructive' | 'secondary' | 'ghost' | 'link';
+type ButtonVariant = 'default' | 'destructive' | 'secondary' | 'ghost' | 'link' | 'outline';
 type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
