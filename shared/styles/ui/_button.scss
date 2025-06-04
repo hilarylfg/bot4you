@@ -47,6 +47,7 @@
 
     &--outline {
         border: 1px solid var(--text-primary);
+        color: var(--text-primary);
         background-color: transparent;
     }
 
@@ -58,10 +59,11 @@
 
     &--ghost {
         background: transparent;
+        color: var(--text-primary);
     }
 
     &--link {
-        color: var(--primary);
+        color: var(--text-primary);
         text-underline-offset: 4px;
 
         &:hover {

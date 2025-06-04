@@ -11,7 +11,7 @@ export const ThemeSwitch = () => {
     const isDark = theme === 'dark'
 
     return (
-        <div className="theme-switch__wrapper">
+        <div className="theme-switch__wrapper hidden-tablet">
             <label className="theme-switch">
                 <input
                     type="checkbox"

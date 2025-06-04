@@ -177,12 +177,7 @@ svg * {
   --transition-duration: 0.2s;
   --transition-duration-fastest: 0.1s;
   --container-padding-x: 16px;
-  --container-width: 80rem;
-}
-@media (width <= 1440px) {
-  :root {
-    --container-width: 62.5rem;
-  }
+  --container-width: 50rem;
 }
 
 .container {
@@ -341,6 +336,7 @@ svg.lucide {
 }
 .button--outline {
   border: 1px solid var(--text-primary);
+  color: var(--text-primary);
   background-color: transparent;
 }
 .button--secondary {
@@ -350,9 +346,10 @@ svg.lucide {
 }
 .button--ghost {
   background: transparent;
+  color: var(--text-primary);
 }
 .button--link {
-  color: var(--primary);
+  color: var(--text-primary);
   text-underline-offset: 4px;
 }
 .button--link:hover {
@@ -379,7 +376,6 @@ svg.lucide {
 }
 
 .chat {
-  width: 800px;
   margin: 0 auto;
   padding: 2rem 0;
   display: flex;
