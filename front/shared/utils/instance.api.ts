@@ -1,4 +1,4 @@
-import { FetchClient } from '../utils'
+import { FetchClient } from './index'
 
 export const api = new FetchClient({
 	baseUrl: '/api/proxy/api/v1',
