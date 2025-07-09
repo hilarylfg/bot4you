@@ -1,0 +1,43 @@
+.scrollArea {
+    position: relative;
+}
+
+.scrollAreaViewport {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    transition: all 0.15s ease;
+    outline: none;
+
+    &:focus-visible {
+        outline: 1px solid;
+        box-shadow: 0 0 0 3px rgb(0 0 0 / 0.05);
+    }
+}
+
+.scrollBar {
+    display: flex;
+    touch-action: none;
+    padding: 1px;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.scrollBarVertical {
+    height: 100%;
+    width: 10px;
+    border-left: 1px solid transparent;
+}
+
+.scrollBarHorizontal {
+    height: 10px;
+    flex-direction: column;
+    border-top: 1px solid transparent;
+}
+
+.scrollBarThumb {
+    background-color: var(--bg-secondary);
+    position: relative;
+    flex: 1;
+    border-radius: 10px;
+}

@@ -9,6 +9,7 @@ import {
     KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import {Button} from "@/shared/components";
+import {ChatMessage} from "@/shared/types";
 
 interface Props {
     setIsLoading: Dispatch<SetStateAction<boolean>>;
@@ -17,6 +18,7 @@ interface Props {
     onMessageSubmit?: (message: string) => void;
     onResponseStart?: (response: string) => void;
     onResponseComplete?: (response: string) => void;
+    chatHistory?: ChatMessage[];
 }
 
 export function PromptBox({
@@ -26,6 +28,7 @@ export function PromptBox({
                               onMessageSubmit,
                               onResponseStart,
                               onResponseComplete,
+                              chatHistory = [],
                           }: Props) {
     const [message, setMessage] = useState<string>("");
 
@@ -54,8 +57,9 @@ export function PromptBox({
                         "HTTP-Referer": window.location.origin,
                     },
                     body: JSON.stringify({
-                        model: "qwen/qwen3-30b-a3b:free",
+                        model: "deepseek/deepseek-chat-v3-0324:free",
                         messages: [
+                            ...chatHistory,
                             {
                                 role: "user",
                                 content: userMessage,

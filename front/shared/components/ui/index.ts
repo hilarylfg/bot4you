@@ -1,1 +1,2 @@
 export {Button} from './button';
+export {ScrollArea, ScrollBar} from "./scroll-area"

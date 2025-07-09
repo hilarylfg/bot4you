@@ -3,10 +3,12 @@
 import {useState} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {Button, Container, PromptBox} from "@/shared/components";
+import {Button, Container, PromptBox, ScrollArea} from "@/shared/components";
 import {useChatHistory} from "@/shared/hooks/use-chat-history";
+import {ChatMessage} from "@/shared/types";
 
 export default function Home() {
+    const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [streamingResponse, setStreamingResponse] = useState<string>("");
@@ -15,8 +17,13 @@ export default function Home() {
 
     const handleMessageSubmit = (message: string) => {
         addMessage(message, "user");
+        setChatHistory(prev => [...prev, {
+            id: Date.now().toString(),
+            role: "user",
+            content: message,
+            timestamp: new Date()
+        }]);
     };
-
     const handleResponseStart = (partialResponse: string) => {
         setStreamingResponse(partialResponse);
     };
@@ -24,6 +31,12 @@ export default function Home() {
     const handleResponseComplete = (response: string) => {
         addMessage(response, "assistant");
         setStreamingResponse("");
+        setChatHistory(prev => [...prev, {
+            id: Date.now().toString() + "_assistant",
+            role: "assistant",
+            content: response,
+            timestamp: new Date()
+        }]);
     };
 
     const handleClearChat = () => {
@@ -71,6 +84,8 @@ export default function Home() {
                         {error}
                     </div>
                 )}
+
+                <ScrollArea className="chat__history__wrapper">
 
                 {messages.length === 0 ? (
                     renderWelcomeScreen()
@@ -123,6 +138,7 @@ export default function Home() {
                         </div>
                     )}
                 </div>)}
+                </ScrollArea>
 
                 <div className="chat__form-container">
                     <PromptBox
@@ -132,6 +148,7 @@ export default function Home() {
                         onMessageSubmit={handleMessageSubmit}
                         onResponseStart={handleResponseStart}
                         onResponseComplete={handleResponseComplete}
+                        chatHistory={chatHistory}
                     />
                 </div>
             </div>
