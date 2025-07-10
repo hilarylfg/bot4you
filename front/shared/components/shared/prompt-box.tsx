@@ -57,7 +57,7 @@ export function PromptBox({
                         "HTTP-Referer": window.location.origin,
                     },
                     body: JSON.stringify({
-                        model: "deepseek/deepseek-chat-v3-0324:free",
+                        model: "qwen/qwen3-30b-a3b:free",
                         messages: [
                             ...chatHistory,
                             {

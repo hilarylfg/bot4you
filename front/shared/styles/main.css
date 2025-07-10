@@ -553,6 +553,7 @@ svg.lucide {
 }
 .chat__message-content {
   word-break: break-word;
+  max-width: 100%;
 }
 .chat__message-content pre {
   margin: 1rem 0;
@@ -564,6 +565,7 @@ svg.lucide {
   font-family: "Consolas", "Monaco", monospace;
   font-size: 0.875rem;
   line-height: 1.5;
+  scrollbar-color: var(--bg-tertiary) #1e1e1e;
 }
 .chat__message-content code:not(pre code) {
   background-color: rgba(0, 0, 0, 0.05);
@@ -582,13 +584,13 @@ svg.lucide {
   margin-bottom: 0;
 }
 .chat__message-content ul, .chat__message-content ol {
-  margin: 0.5rem 0;
+  margin: 1rem 0;
   padding-left: 1.5rem;
 }
 .chat__message-content blockquote {
+  margin: 1rem 0;
   border-left: 4px solid #e2e8f0;
   padding-left: 1rem;
-  margin: 0.5rem 0;
   color: #64748b;
 }
 .chat__error {
