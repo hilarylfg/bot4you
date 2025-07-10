@@ -65,93 +65,100 @@ export default function Home() {
     }
 
     return (
-        <Container>
+        <>
             <div className="chat">
-                <div className="chat__header">
-                    <h1 className="chat__title">Bot4You</h1>
-                    {messages.length > 0 && (
-                        <Button
-                            onClick={handleClearChat}
-                            variant="outline"
-                        >
-                            Очистить чат
-                        </Button>
-                    )}
-                </div>
-
-                {error && (
-                    <div className="chat__error">
-                        {error}
+                <Container>
+                    <div className="chat__header">
+                        <h1 className="chat__title">Bot4You</h1>
+                        {messages.length > 0 && (
+                            <Button
+                                onClick={handleClearChat}
+                                variant="outline"
+                            >
+                                Очистить чат
+                            </Button>
+                        )}
                     </div>
-                )}
+
+                    {error && (
+                        <div className="chat__error">
+                            {error}
+                        </div>
+                    )}
+                </Container>
 
                 <ScrollArea className="chat__history__wrapper">
-
-                {messages.length === 0 ? (
-                    renderWelcomeScreen()
-                ) : (<div className="chat__history">
-                    {messages.map((message) => (
-                        <div
-                            key={message.id}
-                            className={`chat__message chat__message--${message.role}`}
-                        >
-                            <div className="chat__message__info">
-                                {message.role === 'user' ? '👤 Вы' : '🤖 Bot4You'}
-                                <i className="chat__message__info__vr"/>
-                                <span className="chat__message-time">
+                    {messages.length === 0 ? (
+                        renderWelcomeScreen()
+                    ) : (
+                        <Container>
+                            <div className="chat__history">
+                                {messages.map((message) => (
+                                    <div
+                                        key={message.id}
+                                        className={`chat__message chat__message--${message.role}`}
+                                    >
+                                        <div className="chat__message__info">
+                                            {message.role === 'user' ? '👤 Вы' : '🤖 Bot4You'}
+                                            <i className="chat__message__info__vr"/>
+                                            <span className="chat__message-time">
                                 {formatTime(message.timestamp)}
                             </span>
-                            </div>
-                            <div className="chat__message-content">
-                                {message.role === 'assistant' ? (
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                        {message.content}
-                                    </ReactMarkdown>
-                                ) : (
-                                    message.content
+                                        </div>
+                                        <div className="chat__message-content">
+                                            {message.role === 'assistant' ? (
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                    {message.content}
+                                                </ReactMarkdown>
+                                            ) : (
+                                                message.content
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {isLoading && !streamingResponse && (
+                                    <div className="chat__message chat__message--assistant">
+                                        <div className="chat__message__info">
+                                            🤖 Bot4You <span className="chat__typing">печатает...</span>
+                                        </div>
+                                        <div className="chat__message-content">
+                                            🤔<span className="chat__thinking"> Думаю...</span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {streamingResponse && (
+                                    <div className="chat__message chat__message--assistant">
+                                        <div className="chat__message__info">
+                                            🤖 Bot4You <span className="chat__typing">печатает...</span>
+                                        </div>
+                                        <div className="chat__message-content">
+                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                {streamingResponse}
+                                            </ReactMarkdown>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-                        </div>
-                    ))}
-
-                    {isLoading && !streamingResponse && (
-                        <div className="chat__message chat__message--assistant">
-                            <div className="chat__message__info">
-                                🤖 Bot4You <span className="chat__typing">печатает...</span>
-                            </div>
-                            <div className="chat__message-content">
-                                🤔<span className="chat__thinking"> Думаю...</span>
-                            </div>
-                        </div>
+                        </Container>
                     )}
-
-                    {streamingResponse && (
-                        <div className="chat__message chat__message--assistant">
-                            <div className="chat__message__info">
-                                🤖 Bot4You <span className="chat__typing">печатает...</span>
-                            </div>
-                            <div className="chat__message-content">
-                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                    {streamingResponse}
-                                </ReactMarkdown>
-                            </div>
-                        </div>
-                    )}
-                </div>)}
                 </ScrollArea>
 
                 <div className="chat__form-container">
-                    <PromptBox
-                        setIsLoading={setIsLoading}
-                        setError={setError}
-                        isLoading={isLoading}
-                        onMessageSubmit={handleMessageSubmit}
-                        onResponseStart={handleResponseStart}
-                        onResponseComplete={handleResponseComplete}
-                        chatHistory={chatHistory}
-                    />
+                    <Container>
+                        <PromptBox
+                            setIsLoading={setIsLoading}
+                            setError={setError}
+                            isLoading={isLoading}
+                            onMessageSubmit={handleMessageSubmit}
+                            onResponseStart={handleResponseStart}
+                            onResponseComplete={handleResponseComplete}
+                            chatHistory={chatHistory}
+                        />
+                    </Container>
                 </div>
             </div>
-        </Container>
+        </>
     );
 }

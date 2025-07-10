@@ -103,10 +103,6 @@ button {
   color: inherit;
 }
 
-html {
-  scrollbar-gutter: stable;
-}
-
 html, body {
   min-height: 100%;
 }
@@ -172,6 +168,10 @@ svg * {
   которые предпочитают их не использовать
  */
 :root {
+  --color-light: #ffffff;
+  --color-dark: #212121;
+  --color-light-text: #ececf1;
+  --color-dark-text: #353740;
   --border-radius: 8px;
   --border-radius-lg: 12px;
   --transition-duration: 0.2s;
@@ -406,13 +406,13 @@ svg.lucide {
 }
 
 .scrollBarHorizontal {
-  height: 10px;
+  height: 15px;
   flex-direction: column;
   border-top: 1px solid transparent;
 }
 
 .scrollBarThumb {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
   position: relative;
   flex: 1;
   border-radius: 10px;
@@ -493,24 +493,28 @@ svg.lucide {
 .chat__history__wrapper {
   position: relative;
   height: 100%;
+  width: 100vw;
   flex: 1;
   min-height: 0;
 }
 .chat__history__wrapper::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: -20px;
   left: 0;
   right: 0;
-  height: 15px;
+  height: 115px;
   pointer-events: none;
-  z-index: 10;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), transparent);
+  z-index: 2;
+  background: linear-gradient(180deg, var(--bg-primary), transparent 50%);
 }
 .chat__message {
   display: flex;
   flex-direction: column;
   margin-bottom: 1.5rem;
+}
+.chat__message:first-child {
+  padding-top: 1rem;
 }
 .chat__message:last-child {
   padding-bottom: 1.5rem;
@@ -554,6 +558,7 @@ svg.lucide {
   margin: 1rem 0;
   padding: 1rem;
   background-color: #1e1e1e;
+  color: var(--color-light);
   border-radius: 0.375rem;
   overflow-x: auto;
   font-family: "Consolas", "Monaco", monospace;

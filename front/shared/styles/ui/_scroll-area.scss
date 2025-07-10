@@ -30,13 +30,13 @@
 }
 
 .scrollBarHorizontal {
-    height: 10px;
+    height: 15px;
     flex-direction: column;
     border-top: 1px solid transparent;
 }
 
 .scrollBarThumb {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-tertiary);
     position: relative;
     flex: 1;
     border-radius: 10px;
