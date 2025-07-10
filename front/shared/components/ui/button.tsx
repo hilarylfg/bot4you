@@ -21,10 +21,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const Comp = asChild ? Slot : "button";
 
         const buttonClasses = [
+            className,
             "button",
             `button--${variant}`,
-            `button--${size}`,
-            className
+            `button--${size}`
         ].filter(Boolean).join(" ");
 
         return (

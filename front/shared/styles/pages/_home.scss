@@ -105,6 +105,20 @@
         flex-direction: column;
         margin-bottom: 1.5rem;
 
+        &__menu {
+            display: flex;
+            gap: 0.5rem;
+
+            &__button {
+                padding: 0.3rem;
+                height: fit-content;
+
+                &:hover {
+                    background-color: var(--bg-tertiary);
+                }
+            }
+        }
+
         &:first-child {
             padding-top: 1rem;
         }
@@ -114,7 +128,6 @@
         }
 
         &__info {
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -153,6 +166,7 @@
         }
 
         &-content {
+            margin: 1rem 0;
             word-break: break-word;
             max-width: 100%;
 

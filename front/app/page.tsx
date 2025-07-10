@@ -6,6 +6,8 @@ import remarkGfm from "remark-gfm";
 import {Button, Container, PromptBox, ScrollArea} from "@/shared/components";
 import {useChatHistory} from "@/shared/hooks/use-chat-history";
 import {ChatMessage} from "@/shared/types";
+import {Copy, RefreshCcw} from "lucide-react";
+import {toast} from "sonner";
 
 export default function Home() {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -37,6 +39,14 @@ export default function Home() {
             content: response,
             timestamp: new Date()
         }]);
+    };
+
+    const handleCopyMessage = (content: string) => {
+        navigator.clipboard.writeText(content).then(() => {
+            console.log('Сообщение скопировано в буфер обмена');
+        }).catch(err => {
+            console.error('Ошибка при копировании:', err);
+        });
     };
 
     const handleClearChat = () => {
@@ -102,8 +112,8 @@ export default function Home() {
                                             {message.role === 'user' ? '👤 Вы' : '🤖 Bot4You'}
                                             <i className="chat__message__info__vr"/>
                                             <span className="chat__message-time">
-                                {formatTime(message.timestamp)}
-                            </span>
+                                                {formatTime(message.timestamp)}
+                                            </span>
                                         </div>
                                         <div className="chat__message-content">
                                             {message.role === 'assistant' ? (
@@ -112,6 +122,32 @@ export default function Home() {
                                                 </ReactMarkdown>
                                             ) : (
                                                 message.content
+                                            )}
+                                        </div>
+                                        <div className="chat__message__menu">
+                                            <Button
+                                                className="chat__message__menu__button"
+                                                variant="ghost"
+                                                onClick={() => {
+                                                    handleCopyMessage(message.content)
+                                                    toast('Сообщение скопировано в буфер обмена', {
+                                                        duration: 3000,
+                                                    })
+                                                }}
+                                            >
+                                                <Copy/>
+                                            </Button>
+                                            {message.role === 'assistant' && (
+                                                <Button
+                                                    className="chat__message__menu__button"
+                                                    variant="ghost"
+                                                    onClick={() => toast('Функция обновления ответа в разработке', {
+                                                        duration: 3000,
+                                                    })}
+                                                    disabled={isLoading}
+                                                >
+                                                    <RefreshCcw />
+                                                </Button>
                                             )}
                                         </div>
                                     </div>

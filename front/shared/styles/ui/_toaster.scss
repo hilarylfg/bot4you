@@ -1,0 +1,32 @@
+.toaster {
+    --normal-bg: var(--bg-primary);
+    --normal-text: var(--text-primary);
+    --normal-border: var(--border-light);
+
+    [data-sonner-toast] {
+        background: var(--normal-bg);
+        color: var(--normal-text);
+        border: 1px solid var(--normal-border);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+        &[data-type="success"] {
+            border-color: var(--success-border, #22c55e);
+            background: var(--success-bg, #dcfce7);
+            color: var(--success-text, #16a34a);
+        }
+
+        &[data-type="error"] {
+            border-color: var(--error-border, #ef4444);
+            background: var(--error-bg, #fef2f2);
+            color: var(--error-text, #dc2626);
+        }
+
+        &[data-type="warning"] {
+            border-color: var(--warning-border, #f59e0b);
+            background: var(--warning-bg, #fffbeb);
+            color: var(--warning-text, #d97706);
+        }
+    }
+}

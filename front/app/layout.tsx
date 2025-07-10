@@ -2,7 +2,7 @@ import type {Metadata} from "next";
 import {Nunito} from "next/font/google";
 import {ReactNode} from "react";
 import "@/shared/styles/main.css";
-import {ThemeSwitch} from "@/shared/components";
+import {ThemeSwitch, Toaster} from "@/shared/components";
 
 const nunito = Nunito({
     subsets: ['cyrillic'],
@@ -21,6 +21,7 @@ export default function RootLayout({children,}: Readonly<{ children: ReactNode; 
         <body className={nunito.variable}>
         <ThemeSwitch/>
         {children}
+        <Toaster position="top-center" />
         </body>
         </html>
     );
