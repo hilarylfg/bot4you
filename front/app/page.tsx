@@ -87,10 +87,10 @@ export default function Home() {
                     )}
                 </Container>
 
-                <ScrollArea className="chat__history__wrapper">
                     {messages.length === 0 ? (
                         renderWelcomeScreen()
                     ) : (
+                        <ScrollArea className="chat__history__wrapper">
                         <Container>
                             <div className="chat__history">
                                 {messages.map((message) => (
@@ -142,8 +142,8 @@ export default function Home() {
                                 )}
                             </div>
                         </Container>
+                        </ScrollArea>
                     )}
-                </ScrollArea>
 
                 <div className="chat__form-container">
                     <Container>
