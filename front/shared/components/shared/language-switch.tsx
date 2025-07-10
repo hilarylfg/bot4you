@@ -1,0 +1,101 @@
+'use client';
+
+import { useRouter, usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { ChevronDownIcon, GlobeIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components';
+import languagesConfig from '@/shared/i18n/language.json';
+
+interface FlagIconProps {
+    countryCode: string;
+    className?: string;
+}
+
+function FlagIcon({ countryCode, className = '' }: FlagIconProps) {
+    const flagUrl = `https://flagcdn.com/w20/${countryCode.toLowerCase()}.png`;
+
+    return (
+        <img
+            src={flagUrl}
+            alt={`${countryCode} flag`}
+            className={`flag-icon ${className}`}
+            width={20}
+            height={15}
+        />
+    );
+}
+
+interface Language {
+    locale: string;
+    countryCode: string;
+    translationKey: string;
+}
+
+export function LanguageSwitch() {
+    const t = useTranslations('language');
+    const router = useRouter();
+    const pathname = usePathname();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const currentLocale = pathname.split('/')[1];
+    const currentLanguage = languagesConfig.languages.find(lang => lang.locale === currentLocale);
+
+    const switchLanguage = (locale: string) => {
+        const currentPath = pathname.split('/').slice(2).join('/');
+        router.push(`/${locale}/${currentPath}`);
+        setIsOpen(false);
+    };
+
+    return (
+        <div className="language-switch">
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
+                <PopoverTrigger asChild>
+                    <button className="language-switch__trigger">
+                        {currentLanguage ? (
+                            <>
+                                <FlagIcon countryCode={currentLanguage.countryCode} />
+                                <span className="language-switch__current-text">
+                                    {t(currentLanguage.translationKey)}
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                <GlobeIcon className="language-switch__globe-icon" />
+                                <span className="language-switch__current-text">
+                                    {t('switch')}
+                                </span>
+                            </>
+                        )}
+                        <ChevronDownIcon className="language-switch__chevron" />
+                    </button>
+                </PopoverTrigger>
+                <PopoverContent className="language-switch__content" align="end">
+                    <div className="language-switch__header">
+                        <h3 className="language-switch__title">{t('switch')}</h3>
+                    </div>
+                    <div className="language-switch__list">
+                        {languagesConfig.languages.map(({ locale, countryCode, translationKey }: Language) => (
+                            <button
+                                key={locale}
+                                onClick={() => switchLanguage(locale)}
+                                className={`language-switch__item ${
+                                    currentLocale === locale ? 'language-switch__item--active' : ''
+                                }`}
+                                title={t(translationKey)}
+                            >
+                                <FlagIcon countryCode={countryCode} />
+                                <span className="language-switch__item-text">
+                                    {t(translationKey)}
+                                </span>
+                                {currentLocale === locale && (
+                                    <div className="language-switch__check">✓</div>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </PopoverContent>
+            </Popover>
+        </div>
+    );
+}

@@ -1,0 +1,14 @@
+{
+  "languages": [
+    {
+      "locale": "en",
+      "countryCode": "us",
+      "translationKey": "en"
+    },
+    {
+      "locale": "ru",
+      "countryCode": "ru",
+      "translationKey": "ru"
+    }
+  ]
+}

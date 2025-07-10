@@ -1,0 +1,27 @@
+{
+  "welcome": {
+    "title": "Welcome to Bot4You!",
+    "description": "Ask a question and I'll be happy to help you!"
+  },
+  "chat": {
+    "title": "Bot4You",
+    "clearChat": "Clear chat",
+    "loading": "Loading...",
+    "typing": "typing...",
+    "thinking": "Thinking...",
+    "you": "You",
+    "copySuccess": "Message copied to clipboard",
+    "inDev": "This function in development",
+    "clearConfirm": "Clear all chat history?"
+  },
+  "promptBox": {
+    "placeholder": "Enter your question here...",
+    "send": "Send",
+    "process": "Process..."
+  },
+  "language": {
+    "switch": "Switch language",
+    "en": "English",
+    "ru": "Russian"
+  }
+}

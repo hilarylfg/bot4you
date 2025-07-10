@@ -10,6 +10,7 @@ import {
 } from "react";
 import {Button} from "@/shared/components";
 import {ChatMessage} from "@/shared/types";
+import {useTranslations} from "next-intl";
 
 interface Props {
     setIsLoading: Dispatch<SetStateAction<boolean>>;
@@ -30,6 +31,8 @@ export function PromptBox({
                               onResponseComplete,
                               chatHistory = [],
                           }: Props) {
+    const t = useTranslations('promptBox')
+
     const [message, setMessage] = useState<string>("");
 
     const handleSubmit = async (e: FormEvent) => {
@@ -148,7 +151,7 @@ export function PromptBox({
                   onKeyDown={handleKeyDown}
                   rows={4}
                   disabled={isLoading}
-                  placeholder="Введите ваш вопрос здесь..."
+                  placeholder={t('placeholder')}
               />
 
                     <hr className="prompt-box__hr"/>
@@ -160,10 +163,10 @@ export function PromptBox({
                             className="prompt-box__button"
                         >
                             {isLoading ? (
-                                "Обрабатываем..."
+                                t('process')
                             ) : (
                                 <>
-                                    <Send size={16}/> Отправить
+                                    <Send size={16}/>{t('send')}
                                 </>
                             )}
                         </Button>

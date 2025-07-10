@@ -1,15 +1,19 @@
 "use client";
 
 import {useState} from "react";
+import {useTranslations} from 'next-intl';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {Button, Container, PromptBox, ScrollArea} from "@/shared/components";
+import {Button, Container, LanguageSwitch, PromptBox, ScrollArea} from "@/shared/components";
 import {useChatHistory} from "@/shared/hooks/use-chat-history";
 import {ChatMessage} from "@/shared/types";
 import {Copy, RefreshCcw} from "lucide-react";
 import {toast} from "sonner";
 
 export default function Home() {
+    const t = useTranslations('chat');
+    const tWelcome = useTranslations('welcome');
+
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -50,7 +54,7 @@ export default function Home() {
     };
 
     const handleClearChat = () => {
-        if (confirm("Очистить всю историю чата?")) {
+        if (confirm(t('clearConfirmation'))) {
             clearHistory();
             setError(null);
         }
@@ -61,15 +65,17 @@ export default function Home() {
 
     const renderWelcomeScreen = () => (
         <div className="chat__welcome">
-            <h2>Добро пожаловать в Bot4You!</h2>
-            <p>Задайте вопрос, и я с радостью помогу вам!</p>
+            <Container className="chat__welcome__content">
+                <h2>{tWelcome('title')}</h2>
+                <p>{tWelcome('description')}</p>
+            </Container>
         </div>
     );
 
     if (!isLoaded) {
         return (
             <div className="chat">
-                <div className="chat__loading">Загрузка...</div>
+                <div className="chat__loading">{t('loading')}</div>
             </div>
         );
     }
@@ -80,12 +86,13 @@ export default function Home() {
                 <Container>
                     <div className="chat__header">
                         <h1 className="chat__title">Bot4You</h1>
+                        <LanguageSwitch />
                         {messages.length > 0 && (
                             <Button
                                 onClick={handleClearChat}
                                 variant="outline"
                             >
-                                Очистить чат
+                                {t('clearChat')}
                             </Button>
                         )}
                     </div>
@@ -97,10 +104,10 @@ export default function Home() {
                     )}
                 </Container>
 
-                    {messages.length === 0 ? (
-                        renderWelcomeScreen()
-                    ) : (
-                        <ScrollArea className="chat__history__wrapper">
+                {messages.length === 0 ? (
+                    renderWelcomeScreen()
+                ) : (
+                    <ScrollArea className="chat__history__wrapper">
                         <Container>
                             <div className="chat__history">
                                 {messages.map((message) => (
@@ -109,7 +116,7 @@ export default function Home() {
                                         className={`chat__message chat__message--${message.role}`}
                                     >
                                         <div className="chat__message__info">
-                                            {message.role === 'user' ? '👤 Вы' : '🤖 Bot4You'}
+                                            {message.role === 'user' ? `👤 ${t('you')}` : '🤖 Bot4You'}
                                             <i className="chat__message__info__vr"/>
                                             <span className="chat__message-time">
                                                 {formatTime(message.timestamp)}
@@ -130,7 +137,7 @@ export default function Home() {
                                                 variant="ghost"
                                                 onClick={() => {
                                                     handleCopyMessage(message.content)
-                                                    toast('Сообщение скопировано в буфер обмена', {
+                                                    toast(t('copySuccess'), {
                                                         duration: 3000,
                                                     })
                                                 }}
@@ -141,12 +148,12 @@ export default function Home() {
                                                 <Button
                                                     className="chat__message__menu__button"
                                                     variant="ghost"
-                                                    onClick={() => toast('Функция обновления ответа в разработке', {
+                                                    onClick={() => toast(t('inDev'), {
                                                         duration: 3000,
                                                     })}
                                                     disabled={isLoading}
                                                 >
-                                                    <RefreshCcw />
+                                                    <RefreshCcw/>
                                                 </Button>
                                             )}
                                         </div>
@@ -156,10 +163,10 @@ export default function Home() {
                                 {isLoading && !streamingResponse && (
                                     <div className="chat__message chat__message--assistant">
                                         <div className="chat__message__info">
-                                            🤖 Bot4You <span className="chat__typing">печатает...</span>
+                                            🤖 Bot4You <span className="chat__typing">{t('typing')}</span>
                                         </div>
                                         <div className="chat__message-content">
-                                            🤔<span className="chat__thinking"> Думаю...</span>
+                                            🤔<span className="chat__thinking">{t('thinking')}</span>
                                         </div>
                                     </div>
                                 )}
@@ -167,7 +174,7 @@ export default function Home() {
                                 {streamingResponse && (
                                     <div className="chat__message chat__message--assistant">
                                         <div className="chat__message__info">
-                                            🤖 Bot4You <span className="chat__typing">печатает...</span>
+                                            🤖 Bot4You <span className="chat__typing">{t('typing')}</span>
                                         </div>
                                         <div className="chat__message-content">
                                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -178,8 +185,8 @@ export default function Home() {
                                 )}
                             </div>
                         </Container>
-                        </ScrollArea>
-                    )}
+                    </ScrollArea>
+                )}
 
                 <div className="chat__form-container">
                     <Container>

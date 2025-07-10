@@ -7,8 +7,10 @@
 @use 'ui/button';
 @use 'ui/scroll-area';
 @use 'ui/toaster';
+@use 'ui/popover';
 
 @use 'pages/home';
 
 @use 'components/prompt-box';
 @use 'components/theme-switch';
+@use 'components/language-switch';
