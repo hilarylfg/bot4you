@@ -1034,6 +1034,11 @@ svg.lucide {
   border-radius: 0.5rem;
   box-shadow: var(--shadow-lg);
 }
+@media (width <= 767px) {
+  .language-switch__content {
+    width: 14rem;
+  }
+}
 .language-switch__header {
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--border-light);
@@ -1064,6 +1069,11 @@ svg.lucide {
   cursor: pointer;
   transition: all 0.15s ease;
   width: 100%;
+}
+@media (width <= 767px) {
+  .language-switch__item {
+    padding: 0.75rem;
+  }
 }
 .language-switch__item:hover {
   background: var(--bg-tertiary);

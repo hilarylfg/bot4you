@@ -12,8 +12,13 @@ interface FlagIconProps {
     className?: string;
 }
 
-function FlagIcon({ countryCode, className = '' }: FlagIconProps) {
-    const flagUrl = `https://flagcdn.com/w20/${countryCode.toLowerCase()}.png`;
+function FlagEmoji({ countryCode, className = '' }: FlagIconProps) {
+    const flagUrls: Record<string, string> = {
+        'us': 'https://flagcdn.com/w20/us.png', // 🇺🇸 США
+        'ru': 'https://flagcdn.com/w20/ru.png', // 🇷🇺 Россия
+    };
+
+    const flagUrl = flagUrls[countryCode.toLowerCase()] || '&#127987;&#65039;';
 
     return (
         <img
@@ -53,12 +58,7 @@ export function LanguageSwitch() {
                 <PopoverTrigger asChild>
                     <button className="language-switch__trigger">
                         {currentLanguage ? (
-                            <>
-                                <FlagIcon countryCode={currentLanguage.countryCode} />
-                                <span className="language-switch__current-text">
-                                    {t(currentLanguage.translationKey)}
-                                </span>
-                            </>
+                            <FlagEmoji countryCode={currentLanguage.countryCode}/>
                         ) : (
                             <>
                                 <GlobeIcon className="language-switch__globe-icon" />
@@ -75,7 +75,7 @@ export function LanguageSwitch() {
                         <h3 className="language-switch__title">{t('switch')}</h3>
                     </div>
                     <div className="language-switch__list">
-                        {languagesConfig.languages.map(({ locale, countryCode, translationKey }: Language) => (
+                        {languagesConfig.languages.map(({locale, countryCode, translationKey}: Language) => (
                             <button
                                 key={locale}
                                 onClick={() => switchLanguage(locale)}
@@ -84,7 +84,7 @@ export function LanguageSwitch() {
                                 }`}
                                 title={t(translationKey)}
                             >
-                                <FlagIcon countryCode={countryCode} />
+                                <FlagEmoji countryCode={countryCode}/>
                                 <span className="language-switch__item-text">
                                     {t(translationKey)}
                                 </span>
