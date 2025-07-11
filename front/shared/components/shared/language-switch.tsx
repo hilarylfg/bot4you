@@ -1,10 +1,10 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useState } from 'react';
-import { ChevronDownIcon, GlobeIcon } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components';
+import {useRouter, usePathname} from 'next/navigation';
+import {useTranslations} from 'next-intl';
+import {useState} from 'react';
+import {ChevronDownIcon, GlobeIcon} from 'lucide-react';
+import {Popover, PopoverContent, PopoverTrigger} from '@/shared/components';
 import languagesConfig from '@/shared/i18n/language.json';
 
 interface FlagIconProps {
@@ -12,7 +12,7 @@ interface FlagIconProps {
     className?: string;
 }
 
-function FlagEmoji({ countryCode, className = '' }: FlagIconProps) {
+function FlagEmoji({countryCode, className = ''}: FlagIconProps) {
     const flagUrls: Record<string, string> = {
         'us': 'https://flagcdn.com/w20/us.png', // 🇺🇸 США
         'ru': 'https://flagcdn.com/w20/ru.png', // 🇷🇺 Россия
@@ -61,13 +61,13 @@ export function LanguageSwitch() {
                             <FlagEmoji countryCode={currentLanguage.countryCode}/>
                         ) : (
                             <>
-                                <GlobeIcon className="language-switch__globe-icon" />
-                                <span className="language-switch__current-text">
-                                    {t('switch')}
-                                </span>
+                                <GlobeIcon className="language-switch__globe-icon"/>
                             </>
                         )}
-                        <ChevronDownIcon className="language-switch__chevron" />
+                        <span className="language-switch__current-text">
+                                    {currentLanguage ? t(currentLanguage.translationKey) : t('selectLanguage')}
+                        </span>
+                        <ChevronDownIcon className="language-switch__chevron"/>
                     </button>
                 </PopoverTrigger>
                 <PopoverContent className="language-switch__content" align="end">

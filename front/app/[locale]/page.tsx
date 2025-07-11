@@ -54,7 +54,7 @@ export default function Home() {
     };
 
     const handleClearChat = () => {
-        if (confirm(t('clearConfirmation'))) {
+        if (confirm(t('clearConfirm'))) {
             clearHistory();
             setError(null);
         }
