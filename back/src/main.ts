@@ -1,14 +1,15 @@
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
+import RedisStore from 'connect-redis'
 import * as cookieParser from 'cookie-parser'
+import * as session from 'express-session'
 import IORedis from 'ioredis'
 
-import { AppModule } from './app.module'
-import session from 'express-session'
 import { ms, StringValue } from '@/libs/common/utils/ms.util'
 import { parseBoolean } from '@/libs/common/utils/parse-boolean.util'
-import { RedisStore } from 'connect-redis'
+
+import { AppModule } from './app.module'
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
@@ -49,7 +50,7 @@ async function bootstrap() {
 	)
 
 	app.enableCors({
-		origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
+		origin: config.getOrThrow<string>('ALLOWED_ORIGINS'),
 		credentials: true,
 		exposedHeaders: ['set-cookie']
 	})

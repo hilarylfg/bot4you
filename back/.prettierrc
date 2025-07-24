@@ -9,7 +9,6 @@
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "importOrderCaseInsensitive": true,
-  "endOfLine": "auto",
   "importOrderParserPlugins": [
     "classProperties",
     "decorators-legacy",

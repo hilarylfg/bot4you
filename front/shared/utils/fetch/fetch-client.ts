@@ -1,4 +1,4 @@
-	import { FetchError } from './fetch-error'
+import { FetchError } from './fetch-error'
 import { RequestOptions, TypeSearchParams } from './fetch-types'
 
 export class FetchClient {
