@@ -1,1 +1,1 @@
-export {useTheme} from './use-theme'
+export { useChatHistory } from './use-chat-history'

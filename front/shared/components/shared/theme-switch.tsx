@@ -1,15 +1,22 @@
 'use client'
 
 import { Moon, Sun } from 'lucide-react'
-
-import { useTheme } from '@/shared/hooks'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 export const ThemeSwitch = () => {
-	const { theme, toggleTheme, mounted } = useTheme()
+	const { resolvedTheme, setTheme } = useTheme()
+	const [mounted, setMounted] = useState(false)
 
-	if (!mounted) return null
+	useEffect(() => {
+		setMounted(true)
+	}, [])
 
-	const isDark = theme === 'dark'
+	if (!mounted) {
+		return null
+	}
+
+	const isDark = resolvedTheme === 'dark'
 
 	return (
 		<div className='theme-switch__wrapper hidden-tablet'>
@@ -17,7 +24,7 @@ export const ThemeSwitch = () => {
 				<input
 					type='checkbox'
 					checked={isDark}
-					onChange={toggleTheme}
+					onChange={() => setTheme(isDark ? 'light' : 'dark')}
 					aria-label='Переключить тему'
 				/>
 				<span className='slider round'>

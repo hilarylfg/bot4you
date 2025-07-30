@@ -81,8 +81,16 @@
     }
 
     &__title {
+        display: flex;
+        align-items: start;
+        gap: 0.3rem;
         font-size: 2rem;
         font-weight: bold;
+        user-select: none;
+
+        svg {
+            color: var(--accent-primary);
+        }
     }
 
     &__history {

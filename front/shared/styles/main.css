@@ -664,8 +664,15 @@ svg.lucide {
   animation: pulse 1.5s infinite;
 }
 .chat__title {
+  display: flex;
+  align-items: start;
+  gap: 0.3rem;
   font-size: 2rem;
   font-weight: bold;
+  user-select: none;
+}
+.chat__title svg {
+  color: var(--accent-primary);
 }
 .chat__history {
   flex: 1;
@@ -1005,6 +1012,7 @@ svg.lucide {
 }
 .language-switch__current-text {
   flex: 1;
+  user-select: none;
   text-align: left;
 }
 @media (width <= 767px) {
@@ -1067,6 +1075,7 @@ svg.lucide {
   font-size: 0.875rem;
   text-align: left;
   cursor: pointer;
+  user-select: none;
   transition: all 0.15s ease;
   width: 100%;
 }
@@ -1106,6 +1115,7 @@ svg.lucide {
 .language-switch .flag-icon {
   width: 1.25rem;
   height: auto;
+  user-select: none;
   border-radius: 0.125rem;
   flex-shrink: 0;
 }

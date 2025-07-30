@@ -4,7 +4,7 @@ import { Nunito } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { ReactNode } from 'react'
 
-import { ThemeSwitch, Toaster } from '@/shared/components'
+import { ThemeProvider, ThemeSwitch, Toaster } from '@/shared/components'
 import { routing } from '@/shared/i18n/routing'
 import '@/shared/styles/main.css'
 
@@ -31,13 +31,19 @@ export default async function LocaleLayout({
 	}
 
 	return (
-		<html lang={locale}>
+		<html lang={locale} suppressHydrationWarning>
 			<body className={nunito.variable}>
-				<NextIntlClientProvider>
-					<ThemeSwitch />
-					{children}
-					<Toaster position='top-center' />
-				</NextIntlClientProvider>
+				<ThemeProvider
+					defaultTheme='system'
+					enableSystem
+					disableTransitionOnChange
+				>
+					<NextIntlClientProvider>
+						<ThemeSwitch />
+						{children}
+						<Toaster position='top-center' />
+					</NextIntlClientProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	)

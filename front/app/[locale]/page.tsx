@@ -1,6 +1,6 @@
 'use client'
 
-import { Copy, RefreshCcw } from 'lucide-react'
+import { Bot, Copy, RefreshCcw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -14,7 +14,7 @@ import {
 	PromptBox,
 	ScrollArea
 } from '@/shared/components'
-import { useChatHistory } from '@/shared/hooks/use-chat-history'
+import { useChatHistory } from '@/shared/hooks'
 import { ChatMessage } from '@/shared/types'
 
 export default function Home() {
@@ -101,7 +101,9 @@ export default function Home() {
 			<div className='chat'>
 				<Container>
 					<div className='chat__header'>
-						<h1 className='chat__title'>Bot4You</h1>
+						<h1 className='chat__title'>
+							<Bot size={40} /> Bot4You
+						</h1>
 						<LanguageSwitch />
 						{messages.length > 0 && (
 							<Button onClick={handleClearChat} variant='outline'>
