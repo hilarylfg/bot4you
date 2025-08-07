@@ -7,3 +7,15 @@ export {
 	PopoverContent,
 	PopoverAnchor
 } from './popover'
+export {
+	Card,
+	CardHeader,
+	CardFooter,
+	CardTitle,
+	CardAction,
+	CardDescription,
+	CardContent
+} from './card'
+export { Label } from './label'
+export { Input } from './input'
+export { Squares } from './squares-bg'

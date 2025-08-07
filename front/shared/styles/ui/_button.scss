@@ -46,13 +46,13 @@
     }
 
     &--outline {
-        border: 1px solid var(--text-primary);
+        border: 1px solid var(--ring);
         color: var(--text-primary);
         background-color: transparent;
     }
 
     &--secondary {
-        background-color: var(--text-primary);
+        background-color: var(--ring);
         color: var(--text-inverse);
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
