@@ -23,5 +23,29 @@
     "switch": "Switch language",
     "en": "English",
     "ru": "Russian"
+  },
+  "authForm": {
+    "email": "E-mail",
+    "password": "Password",
+    "orContinue": "Or continue with",
+    "youAgree": "By clicking continue, you agree to our Terms of Service and Privacy Policy.",
+    "termsOsService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "login": {
+      "welcome": "Welcome back!",
+      "desc": "Login to your account",
+      "forgotPass": "Forgot password?",
+      "submit": "Login",
+      "dontHaveAccount": "Don&apos;t have an account?",
+      "signup": "Sign Up"
+    },
+    "register": {
+      "welcome": "Welcome!",
+      "desc": "Create your account",
+      "repeatPass": "Repeat password",
+      "submit": "Register",
+      "haveAccount": "Already have an account?",
+      "login": "Log in"
+    }
   }
 }

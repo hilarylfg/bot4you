@@ -1,6 +1,7 @@
 'use client'
 
 import { Bot } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { ComponentProps } from 'react'
 import { FaGithub, FaGoogle, FaYandex } from 'react-icons/fa'
 
@@ -15,6 +16,8 @@ import {
 import { cn } from '@/shared/utils'
 
 export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
+	const t = useTranslations('authForm')
+
 	return (
 		<div className={cn('login-form', className)} {...props}>
 			<Card className='login-form__card'>
@@ -23,14 +26,14 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
 						<div className='login-form__form-inner'>
 							<div className='login-form__header'>
 								<h1 className='login-form__title'>
-									Welcome back
+									{t('login.welcome')}
 								</h1>
 								<p className='login-form__description'>
-									Login to your account
+									{t('login.desc')}
 								</p>
 							</div>
 							<div className='login-form__field'>
-								<Label htmlFor='email'>Email</Label>
+								<Label htmlFor='email'>{t('email')}</Label>
 								<Input
 									id='email'
 									type='email'
@@ -40,12 +43,14 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
 							</div>
 							<div className='login-form__field'>
 								<div className='login-form__password-header'>
-									<Label htmlFor='password'>Password</Label>
+									<Label htmlFor='password'>
+										{t('password')}
+									</Label>
 									<a
 										href='#'
 										className='login-form__forgot-link'
 									>
-										Forgot your password?
+										{t('login.forgotPass')}
 									</a>
 								</div>
 								<Input id='password' type='password' required />
@@ -54,39 +59,27 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
 								type='submit'
 								className='button--full-width'
 							>
-								Login
+								{t('login.submit')}
 							</Button>
 							<div className='login-form__divider'>
 								<span className='login-form__divider-text'>
-									Or continue with
+									{t('orContinue')}
 								</span>
 							</div>
 							<div className='login-form__social-buttons'>
-								<Button
-									variant='outline'
-									type='button'
-									className='button--full-width'
-								>
+								<Button variant='outline' type='button'>
 									<FaGithub />
 									<span className='sr-only'>
 										Login with GitHub
 									</span>
 								</Button>
-								<Button
-									variant='outline'
-									type='button'
-									className='button--full-width'
-								>
+								<Button variant='outline' type='button'>
 									<FaGoogle />
 									<span className='sr-only'>
 										Login with Google
 									</span>
 								</Button>
-								<Button
-									variant='outline'
-									type='button'
-									className='button--full-width'
-								>
+								<Button variant='outline' type='button'>
 									<FaYandex />
 									<span className='sr-only'>
 										Login with Yandex
@@ -94,8 +87,8 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
 								</Button>
 							</div>
 							<div className='login-form__signup-link'>
-								Don&apos;t have an account?{' '}
-								<a href='#'>Sign up</a>
+								{t('login.dontHaveAccount') + ' '}
+								<a href='#'>{t('login.signup')}</a>
 							</div>
 						</div>
 					</form>
@@ -114,9 +107,10 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
 				</CardContent>
 			</Card>
 			<div className='login-form__footer'>
-				By clicking continue, you agree to our{' '}
-				<a href='#'>Terms of Service</a> and{' '}
-				<a href='#'>Privacy Policy</a>.
+				{t('youAgree')}
+				{/*By clicking continue, you agree to our{' '}*/}
+				{/*<a href='#'>Terms of Service</a> and{' '}*/}
+				{/*<a href='#'>Privacy Policy</a>.*/}
 			</div>
 		</div>
 	)
