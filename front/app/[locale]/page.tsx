@@ -11,7 +11,7 @@ import {
 	Button,
 	ChatHeader,
 	Container,
-	LogoLoader,
+	LogoLoaderClient,
 	PromptBox,
 	ScrollArea
 } from '@/shared/components'
@@ -82,7 +82,7 @@ export default function Home() {
 
 	return (
 		<>
-			<LogoLoader isLoading={!isLoaded} />
+			<LogoLoaderClient isLoading={!isLoaded} />
 
 			<div className='chat'>
 				<ChatHeader
