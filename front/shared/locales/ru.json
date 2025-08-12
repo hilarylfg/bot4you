@@ -1,0 +1,73 @@
+{
+  "app": {
+    "name": "Bot4You"
+  },
+  "common": {
+    "actions": {
+      "send": "Отправить",
+      "clear": "Очистить",
+      "switchTheme": "Переключить тему",
+      "login": "Войти",
+      "signup": "Зарегистрироваться"
+    },
+    "status": {
+      "loading": "Загрузка…",
+      "processing": "Обрабатываем…",
+      "typing": "печатает…",
+      "thinking": "Думаю…"
+    },
+    "labels": {
+      "you": "Вы",
+      "language": "Язык",
+      "and": "И"
+    },
+    "languages": {
+      "switch": "Переключить язык",
+      "en": "English",
+      "ru": "Русский"
+    },
+    "messages": {
+      "copySuccess": "Сообщение скопировано в буфер обмена",
+      "inDev": "Данная функция в разработке",
+      "clearConfirm": "Очистить всю историю чата?"
+    }
+  },
+  "auth": {
+    "fields": {
+      "email": "E-mail",
+      "password": "Пароль",
+      "repeatPassword": "Повторите пароль"
+    },
+    "shared": {
+      "orContinue": "Продолжить при помощи",
+      "youAgree": "Нажимая далее, вы соглашаетесь с",
+      "termsOfService": "Правилами использования",
+      "privacyPolicy": "Политикой конфиденциальности"
+    },
+    "login": {
+      "title": "С возвращением!",
+      "description": "Войдите в свой аккаунт",
+      "forgotPassword": "Забыли пароль?"
+    },
+    "register": {
+      "title": "Добро пожаловать!",
+      "description": "Создайте свой аккаунт"
+    },
+    "cta": {
+      "toSignup": "Нет аккаунта?",
+      "toLogin": "Уже есть аккаунт?"
+    }
+  },
+  "screens": {
+    "welcome": {
+      "title": "Добро пожаловать в Bot4You!",
+      "description": "Задайте вопрос, и я с радостью помогу вам!"
+    },
+    "chat": {
+      "title": "Bot4You"
+    }
+  },
+  "placeholders": {
+    "question": "Введите ваш вопрос здесь..."
+  }
+}

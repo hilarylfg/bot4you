@@ -1,12 +1,15 @@
 'use client'
 
 import { Moon, Sun } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 export const ThemeSwitch = () => {
 	const { resolvedTheme, setTheme } = useTheme()
 	const [mounted, setMounted] = useState(false)
+
+	const t = useTranslations()
 
 	useEffect(() => {
 		setMounted(true)
@@ -25,7 +28,7 @@ export const ThemeSwitch = () => {
 					type='checkbox'
 					checked={isDark}
 					onChange={() => setTheme(isDark ? 'light' : 'dark')}
-					aria-label='Переключить тему'
+					aria-label={t('common.actions.switchTheme')}
 				/>
 				<span className='slider round'>
 					<Sun className='sun-icon' />

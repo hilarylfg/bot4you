@@ -4,18 +4,31 @@
     &__form {
         display: flex;
         flex-direction: column;
+        position: relative;
         background: var(--bg-secondary);
-        border: 1px solid var(--border-medium);
+        border: 1px solid var(--ring);
         box-shadow: 0 2px 4px 0 rgba(25, 33, 61, 0.08);
         border-radius: 16px;
         padding: 24px 24px 16px 24px;
+        margin-top: 5px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: -55px;
+            left: -0.5%;
+            width: 101%;
+            height: 50px;
+            background: linear-gradient(to top, var(--bg-primary), rgba(0,0,0,0));
+            z-index: 1;
+        }
     }
 
     &__hr {
         margin: 15px 0;
         border: none;
         height: 1px;
-        background-color: var(--border-medium);
+        background-color: var(--ring);
     }
 
     &__textarea {

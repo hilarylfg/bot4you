@@ -1,6 +1,6 @@
 'use client'
 
-import { Bot, Copy, RefreshCcw } from 'lucide-react'
+import { Bot, Copy, RefreshCcw, Trash } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -18,8 +18,7 @@ import { useChatHistory } from '@/shared/hooks'
 import { ChatMessage } from '@/shared/types'
 
 export default function Home() {
-	const t = useTranslations('chat')
-	const tWelcome = useTranslations('welcome')
+	const t = useTranslations()
 
 	const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
 	const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -70,7 +69,7 @@ export default function Home() {
 	}
 
 	const handleClearChat = () => {
-		if (confirm(t('clearConfirm'))) {
+		if (confirm(t('common.messages.clearConfirm'))) {
 			clearHistory()
 			setError(null)
 		}
@@ -82,8 +81,8 @@ export default function Home() {
 	const renderWelcomeScreen = () => (
 		<div className='chat__welcome'>
 			<Container className='chat__welcome__content'>
-				<h2>{tWelcome('title')}</h2>
-				<p>{tWelcome('description')}</p>
+				<h2>{t('screens.welcome.title')}</h2>
+				<p>{t('screens.welcome.description')}</p>
 			</Container>
 		</div>
 	)
@@ -91,7 +90,9 @@ export default function Home() {
 	if (!isLoaded) {
 		return (
 			<div className='chat'>
-				<div className='chat__loading'>{t('loading')}</div>
+				<div className='chat__loading'>
+					{t('common.status.loading')}
+				</div>
 			</div>
 		)
 	}
@@ -102,12 +103,15 @@ export default function Home() {
 				<Container>
 					<div className='chat__header'>
 						<h1 className='chat__title'>
-							<Bot size={40} /> Bot4You
+							<Bot size={40} /> {t('app.name')}
 						</h1>
 						<LanguageSwitch />
 						{messages.length > 0 && (
 							<Button onClick={handleClearChat} variant='outline'>
-								{t('clearChat')}
+								<Trash size={16} />{' '}
+								<span className='hidden-tablet'>
+									{t('common.actions.clear')}
+								</span>
 							</Button>
 						)}
 					</div>
@@ -128,8 +132,8 @@ export default function Home() {
 									>
 										<div className='chat__message__info'>
 											{message.role === 'user'
-												? `👤 ${t('you')}`
-												: '🤖 Bot4You'}
+												? `👤 ${t('common.labels.you')}`
+												: `🤖 ${t('app.name')}`}
 											<i className='chat__message__info__vr' />
 											<span className='chat__message-time'>
 												{formatTime(message.timestamp)}
@@ -154,9 +158,14 @@ export default function Home() {
 													handleCopyMessage(
 														message.content
 													)
-													toast(t('copySuccess'), {
-														duration: 3000
-													})
+													toast(
+														t(
+															'common.messages.copySuccess'
+														),
+														{
+															duration: 3000
+														}
+													)
 												}}
 											>
 												<Copy />
@@ -166,9 +175,14 @@ export default function Home() {
 													className='chat__message__menu__button'
 													variant='ghost'
 													onClick={() =>
-														toast(t('inDev'), {
-															duration: 3000
-														})
+														toast(
+															t(
+																'common.messages.inDev'
+															),
+															{
+																duration: 3000
+															}
+														)
 													}
 													disabled={isLoading}
 												>
@@ -182,15 +196,15 @@ export default function Home() {
 								{isLoading && !streamingResponse && (
 									<div className='chat__message chat__message--assistant'>
 										<div className='chat__message__info'>
-											🤖 Bot4You{' '}
+											🤖 {t('app.name') + ' '}
 											<span className='chat__typing'>
-												{t('typing')}
+												{t('common.status.typing')}
 											</span>
 										</div>
 										<div className='chat__message-content'>
 											🤔
 											<span className='chat__thinking'>
-												{t('thinking')}
+												{t('common.status.thinking')}
 											</span>
 										</div>
 									</div>
@@ -199,9 +213,9 @@ export default function Home() {
 								{streamingResponse && (
 									<div className='chat__message chat__message--assistant'>
 										<div className='chat__message__info'>
-											🤖 Bot4You{' '}
+											🤖 {t('app.name') + ' '}
 											<span className='chat__typing'>
-												{t('typing')}
+												{t('common.status.typing')}
 											</span>
 										</div>
 										<div className='chat__message-content'>

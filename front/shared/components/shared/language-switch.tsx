@@ -37,7 +37,7 @@ function FlagEmoji({ countryCode, className = '' }: FlagIconProps) {
 		<img
 			src={flagUrl}
 			alt={`${countryCode} flag`}
-			className={`flag-icon ${className}`}
+			className={cn('flag-icon', className)}
 			width={20}
 			height={15}
 		/>
@@ -47,17 +47,17 @@ function FlagEmoji({ countryCode, className = '' }: FlagIconProps) {
 interface Language {
 	locale: string
 	countryCode: string
-	translationKey: string
+	translationKey: 'en' | 'ru'
 }
 
 export function LanguageSwitch() {
-	const t = useTranslations('language')
+	const t = useTranslations('common.languages') // используем 'language', а не 'languages'
 	const router = useRouter()
 	const pathname = usePathname()
 	const [isOpen, setIsOpen] = useState(false)
 
 	const currentLocale = pathname.split('/')[1]
-	const currentLanguage = languagesConfig.languages.find(
+	const currentLanguage = (languagesConfig.languages as Language[]).find(
 		lang => lang.locale === currentLocale
 	)
 
@@ -77,14 +77,12 @@ export function LanguageSwitch() {
 								countryCode={currentLanguage.countryCode}
 							/>
 						) : (
-							<>
-								<GlobeIcon className='language-switch__globe-icon' />
-							</>
+							<GlobeIcon className='language-switch__globe-icon' />
 						)}
 						<span className='language-switch__current-text'>
 							{currentLanguage
 								? t(currentLanguage.translationKey)
-								: t('selectLanguage')}
+								: 'Select Language'}{' '}
 						</span>
 						<ChevronDownIcon className='language-switch__chevron' />
 					</button>
@@ -99,12 +97,8 @@ export function LanguageSwitch() {
 						</h3>
 					</div>
 					<div className='language-switch__list'>
-						{languagesConfig.languages.map(
-							({
-								locale,
-								countryCode,
-								translationKey
-							}: Language) => (
+						{(languagesConfig.languages as Language[]).map(
+							({ locale, countryCode, translationKey }) => (
 								<button
 									key={locale}
 									onClick={() => switchLanguage(locale)}

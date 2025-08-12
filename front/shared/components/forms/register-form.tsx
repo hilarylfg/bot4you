@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
 
 import {
 	AuthFooter,
@@ -12,12 +11,12 @@ import {
 	Label
 } from '@/shared/components'
 
-export function LoginForm() {
+export function RegisterForm() {
 	const t = useTranslations()
 
 	return (
 		<>
-			<AuthHeader type='login' />
+			<AuthHeader type='register' />
 
 			<div className='auth-form__field'>
 				<Label htmlFor='email'>{t('auth.fields.email')}</Label>
@@ -30,24 +29,23 @@ export function LoginForm() {
 			</div>
 
 			<div className='auth-form__field'>
-				<div className='auth-form__password-header'>
-					<Label htmlFor='password'>
-						{t('auth.fields.password')}
-					</Label>
-					<Link
-						href='/auth/forgot-password'
-						className='auth-form__forgot-link'
-					>
-						{t('auth.login.forgotPassword')}
-					</Link>
-				</div>
+				<Label htmlFor='password'>{t('auth.fields.password')}</Label>
 				<Input id='password' type='password' required />
 			</div>
 
-			<Button type='submit'>{t('common.actions.login')}</Button>
+			<div className='auth-form__field'>
+				<Label htmlFor='confirmPassword'>
+					{t('auth.fields.repeatPassword')}
+				</Label>
+				<Input id='confirmPassword' type='password' required />
+			</div>
 
-			<AuthSocialButtons type='login' />
-			<AuthFooter type='login' />
+			<Button type='submit' className='button--full-width'>
+				{t('common.actions.signup')}
+			</Button>
+
+			<AuthSocialButtons type='register' />
+			<AuthFooter type='register' />
 		</>
 	)
 }

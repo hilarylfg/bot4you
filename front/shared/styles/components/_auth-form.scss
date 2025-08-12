@@ -1,6 +1,6 @@
 @use '../helpers/index' as *;
 
-.login-form {
+.auth-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -166,7 +166,7 @@
 
     }
 
-    &__footer {
+    &__terms-privacy {
         text-align: center;
         font-size: 0.75rem;
         text-wrap: balance;

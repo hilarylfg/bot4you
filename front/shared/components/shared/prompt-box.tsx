@@ -32,7 +32,7 @@ export function PromptBox({
 	onResponseComplete,
 	chatHistory = []
 }: Props) {
-	const t = useTranslations('promptBox')
+	const t = useTranslations()
 
 	const [message, setMessage] = useState<string>('')
 
@@ -148,7 +148,7 @@ export function PromptBox({
 				onKeyDown={handleKeyDown}
 				rows={4}
 				disabled={isLoading}
-				placeholder={t('placeholder')}
+				placeholder={t('placeholders.question')}
 			/>
 
 			<hr className='prompt-box__hr' />
@@ -160,11 +160,11 @@ export function PromptBox({
 					className='prompt-box__button'
 				>
 					{isLoading ? (
-						t('process')
+						t('common.status.processing')
 					) : (
 						<>
 							<Send size={16} />
-							{t('send')}
+							{t('common.actions.send')}
 						</>
 					)}
 				</Button>

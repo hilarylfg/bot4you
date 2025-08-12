@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "Bot4You"
+  },
+  "common": {
+    "actions": {
+      "send": "Send",
+      "clear": "Clear",
+      "switchTheme": "Switch theme",
+      "login": "Sign in",
+      "signup": "Sign up"
+    },
+    "status": {
+      "loading": "Loading…",
+      "processing": "Working on it…",
+      "typing": "typing…",
+      "thinking": "Thinking…"
+    },
+    "labels": {
+      "you": "You",
+      "language": "Language",
+      "and": "And"
+    },
+    "languages": {
+      "switch": "Switch language",
+      "en": "English",
+      "ru": "Русский"
+    },
+    "messages": {
+      "copySuccess": "Copied to clipboard",
+      "inDev": "This feature is still in development",
+      "clearConfirm": "Clear the whole chat?"
+    }
+  },
+  "auth": {
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "repeatPassword": "Confirm password"
+    },
+    "shared": {
+      "orContinue": "Continue with",
+      "youAgree": "By continuing, you agree to our",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "login": {
+      "title": "Welcome back!",
+      "description": "Sign in to your account",
+      "forgotPassword": "Forgot password?"
+    },
+    "register": {
+      "title": "Welcome!",
+      "description": "Create your account"
+    },
+    "cta": {
+      "toSignup": "Don't have an account?",
+      "toLogin": "Already have an account?"
+    }
+  },
+  "screens": {
+    "welcome": {
+      "title": "Welcome to Bot4You!",
+      "description": "Ask me anything — happy to help!"
+    }
+  },
+  "placeholders": {
+    "question": "Type your question here..."
+  }
+}
