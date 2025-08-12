@@ -1479,4 +1479,45 @@ svg.lucide {
   border: 0;
 }
 
+.logo-loader {
+  overflow: visible;
+  height: fit-content;
+  width: fit-content;
+  padding: 20px;
+  display: flex;
+}
+.logo-loader__logo {
+  height: 50vh;
+  width: 50vw;
+  fill: none;
+  stroke-dasharray: 20px;
+  stroke: var(--accent-primary);
+  animation: load 15s infinite linear;
+}
+.logo-loader__wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-primary);
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.6s ease-in-out;
+  pointer-events: all;
+}
+.logo-loader__wrapper--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes load {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 200px;
+  }
+}
+
 /*# sourceMappingURL=main.css.map */

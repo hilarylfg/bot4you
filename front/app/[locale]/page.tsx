@@ -1,6 +1,6 @@
 'use client'
 
-import { Bot, Copy, RefreshCcw, Trash } from 'lucide-react'
+import { Copy, RefreshCcw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -9,8 +9,9 @@ import { toast } from 'sonner'
 
 import {
 	Button,
+	ChatHeader,
 	Container,
-	LanguageSwitch,
+	LogoLoader,
 	PromptBox,
 	ScrollArea
 } from '@/shared/components'
@@ -39,6 +40,7 @@ export default function Home() {
 			}
 		])
 	}
+
 	const handleResponseStart = (partialResponse: string) => {
 		setStreamingResponse(partialResponse)
 	}
@@ -78,49 +80,24 @@ export default function Home() {
 	const formatTime = (date: Date): string =>
 		date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
-	const renderWelcomeScreen = () => (
-		<div className='chat__welcome'>
-			<Container className='chat__welcome__content'>
-				<h2>{t('screens.welcome.title')}</h2>
-				<p>{t('screens.welcome.description')}</p>
-			</Container>
-		</div>
-	)
-
-	if (!isLoaded) {
-		return (
-			<div className='chat'>
-				<div className='chat__loading'>
-					{t('common.status.loading')}
-				</div>
-			</div>
-		)
-	}
-
 	return (
 		<>
-			<div className='chat'>
-				<Container>
-					<div className='chat__header'>
-						<h1 className='chat__title'>
-							<Bot size={40} /> {t('app.name')}
-						</h1>
-						<LanguageSwitch />
-						{messages.length > 0 && (
-							<Button onClick={handleClearChat} variant='outline'>
-								<Trash size={16} />{' '}
-								<span className='hidden-tablet'>
-									{t('common.actions.clear')}
-								</span>
-							</Button>
-						)}
-					</div>
+			<LogoLoader isLoading={!isLoaded} />
 
-					{error && <div className='chat__error'>{error}</div>}
-				</Container>
+			<div className='chat'>
+				<ChatHeader
+					hasMessages={messages.length > 0}
+					onClear={handleClearChat}
+					error={error}
+				/>
 
 				{messages.length === 0 ? (
-					renderWelcomeScreen()
+					<div className='chat__welcome'>
+						<Container className='chat__welcome__content'>
+							<h2>{t('screens.welcome.title')}</h2>
+							<p>{t('screens.welcome.description')}</p>
+						</Container>
+					</div>
 				) : (
 					<ScrollArea className='chat__history__wrapper'>
 						<Container>
@@ -162,9 +139,7 @@ export default function Home() {
 														t(
 															'common.messages.copySuccess'
 														),
-														{
-															duration: 3000
-														}
+														{ duration: 3000 }
 													)
 												}}
 											>
@@ -179,9 +154,7 @@ export default function Home() {
 															t(
 																'common.messages.inDev'
 															),
-															{
-																duration: 3000
-															}
+															{ duration: 3000 }
 														)
 													}
 													disabled={isLoading}
