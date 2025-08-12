@@ -35,6 +35,10 @@
         align-items: center;
         margin-bottom: 1.5rem;
         flex-shrink: 0;
+
+        @include mobile {
+            margin-bottom: 1rem;
+        }
     }
 
     &__clear-btn {
@@ -103,7 +107,7 @@
         &__wrapper {
             position: relative;
             height: 100%;
-            width: 100vw;
+            width: 100%;
             flex: 1;
             min-height: 0;
 
@@ -146,6 +150,18 @@
 
         &:last-child {
             padding-bottom: 1.5rem;
+
+            @include tablet {
+                padding-bottom: 1rem;
+            }
+
+            @include mobile {
+                padding-bottom: 0.5rem;
+            }
+
+            @include mobile-s {
+                padding-bottom: 0;
+            }
         }
 
         &__info {
@@ -197,7 +213,9 @@
                 background-color: #1e1e1e;
                 color: var(--color-light);
                 border-radius: 0.375rem;
+                max-width: 90vw;
                 overflow-x: auto;
+                word-wrap: break-word;
                 font-family: 'Consolas', 'Monaco', monospace;
                 font-size: 0.875rem;
                 line-height: 1.5;

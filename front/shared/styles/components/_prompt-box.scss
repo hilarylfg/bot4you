@@ -39,6 +39,14 @@
         height: 70px;
         resize: none;
 
+        @include mobile {
+            height: 50px;
+        }
+
+        @include mobile-s {
+            height: 45px;
+        }
+
         &:focus {
             outline: none;
         }
