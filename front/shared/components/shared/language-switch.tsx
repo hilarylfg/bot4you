@@ -1,12 +1,13 @@
 'use client'
 
 import { ChevronDownIcon, GlobeIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { startTransition, useState } from 'react'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components'
 import languagesConfig from '@/shared/i18n/language.json'
+import { usePathname, useRouter } from '@/shared/i18n/navigation'
 import { cn } from '@/shared/utils'
 
 interface FlagIconProps {
@@ -16,8 +17,8 @@ interface FlagIconProps {
 
 function FlagEmoji({ countryCode, className = '' }: FlagIconProps) {
 	const flagUrls: Record<string, string> = {
-		us: 'https://flagcdn.com/w20/us.png', // 🇺🇸 США
-		ru: 'https://flagcdn.com/w20/ru.png' // 🇷🇺 Россия
+		us: '/icons/us.png',
+		ru: '/icons/ru.png'
 	}
 
 	const flagUrl = flagUrls[countryCode.toLowerCase()]
@@ -34,12 +35,12 @@ function FlagEmoji({ countryCode, className = '' }: FlagIconProps) {
 	}
 
 	return (
-		<img
+		<Image
 			src={flagUrl}
 			alt={`${countryCode} flag`}
 			className={cn('flag-icon', className)}
 			width={20}
-			height={15}
+			height={18}
 		/>
 	)
 }
@@ -51,19 +52,20 @@ interface Language {
 }
 
 export function LanguageSwitch() {
-	const t = useTranslations('common.languages') // используем 'language', а не 'languages'
+	const t = useTranslations('common.languages')
 	const router = useRouter()
 	const pathname = usePathname()
+	const currentLocale = useLocale()
 	const [isOpen, setIsOpen] = useState(false)
 
-	const currentLocale = pathname.split('/')[1]
 	const currentLanguage = (languagesConfig.languages as Language[]).find(
 		lang => lang.locale === currentLocale
 	)
 
 	const switchLanguage = (locale: string) => {
-		const currentPath = pathname.split('/').slice(2).join('/')
-		router.push(`/${locale}/${currentPath}`)
+		startTransition(() => {
+			router.replace(pathname, { locale })
+		})
 		setIsOpen(false)
 	}
 
