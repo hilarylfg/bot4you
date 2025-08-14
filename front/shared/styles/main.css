@@ -934,7 +934,7 @@ svg.lucide {
   background-color: #1e1e1e;
   color: var(--color-light);
   border-radius: 0.375rem;
-  max-width: 90vw;
+  width: 90vw;
   overflow-x: auto;
   word-wrap: break-word;
   font-family: "Consolas", "Monaco", monospace;

@@ -8,7 +8,8 @@
       "clear": "Clear",
       "switchTheme": "Switch theme",
       "login": "Sign in",
-      "signup": "Sign up"
+      "signup": "Sign up",
+      "cancel": "Cancel"
     },
     "status": {
       "loading": "Loading…",
@@ -29,7 +30,8 @@
     "messages": {
       "copySuccess": "Copied to clipboard",
       "inDev": "This feature is still in development",
-      "clearConfirm": "Clear the whole chat?"
+      "clearConfirm": "Clear the whole chat?",
+      "errorMessage": "Something went wrong. Please try again later."
     }
   },
   "auth": {
