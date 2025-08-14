@@ -13,6 +13,7 @@
         margin-top: 5px;
 
         &::before {
+            pointer-events: none;
             content: "";
             position: absolute;
             top: -55px;

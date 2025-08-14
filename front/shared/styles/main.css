@@ -1055,6 +1055,7 @@ svg.lucide {
   margin-top: 5px;
 }
 .prompt-box__form::before {
+  pointer-events: none;
   content: "";
   position: absolute;
   top: -55px;
