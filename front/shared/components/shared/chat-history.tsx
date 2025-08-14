@@ -8,6 +8,7 @@ import {
 	ScrollArea,
 	StreamingAssistantMessage
 } from '@/shared/components'
+import { useChatAutoScroll } from '@/shared/hooks'
 import { ChatMessage } from '@/shared/types'
 
 interface Props {
@@ -24,11 +25,22 @@ export function ChatHistory({
 	showTypingPlaceholder
 }: Props) {
 	const t = useTranslations()
+
+	const { scrollAreaRef, messagesEndRef, handleScroll } = useChatAutoScroll({
+		isLoading,
+		streamingResponse,
+		messages
+	})
+
 	return (
-		<ScrollArea className='chat__history__wrapper'>
+		<ScrollArea
+			className='chat__history__wrapper'
+			ref={scrollAreaRef}
+			onScroll={handleScroll}
+		>
 			<Container>
 				<div className='chat__history'>
-					{messages.map(m => (
+					{messages.map((m: ChatMessage) => (
 						<ChatMessageItem
 							key={m.id}
 							message={m}
@@ -60,6 +72,8 @@ export function ChatHistory({
 							content={streamingResponse}
 						/>
 					)}
+
+					<div ref={messagesEndRef} style={{ height: '0.1px' }} />
 				</div>
 			</Container>
 		</ScrollArea>
