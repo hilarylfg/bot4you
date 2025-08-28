@@ -1,5 +1,10 @@
-import { Chat } from '@/shared/components'
+import { Chat, LogoLoaderShell } from '@/shared/components'
 
 export default function Page() {
-	return <Chat />
+	return (
+		<>
+			<LogoLoaderShell />
+			<Chat />
+		</>
+	)
 }

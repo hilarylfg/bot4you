@@ -4,12 +4,7 @@ import { Nunito } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { ReactNode } from 'react'
 
-import {
-	LogoLoaderShell,
-	ThemeProvider,
-	ThemeSwitch,
-	Toaster
-} from '@/shared/components'
+import { ThemeProvider, ThemeSwitch, Toaster } from '@/shared/components'
 import { routing } from '@/shared/i18n/routing'
 import '@/shared/styles/main.css'
 
@@ -45,7 +40,6 @@ export default async function LocaleLayout({
 				>
 					<NextIntlClientProvider>
 						<ThemeSwitch />
-						<LogoLoaderShell />
 						{children}
 						<Toaster position='top-center' />
 					</NextIntlClientProvider>
