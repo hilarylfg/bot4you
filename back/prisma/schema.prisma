@@ -73,6 +73,7 @@ enum AuthMethod {
   CREDENTIALS
   GOOGLE
   YANDEX
+  GITHUB
 }
 
 enum TokenType {
