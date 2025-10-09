@@ -68,10 +68,6 @@ export class BaseOAuthService {
 			)
 		}
 
-		const expiresAt = tokens.expires_in
-			? Math.floor(Date.now() / 1000 + tokens.expires_in)
-			: tokens.expires_at
-
 		const userRequest = await fetch(this.options.profile_url, {
 			headers: {
 				Authorization: `Bearer ${tokens.access_token}`
@@ -85,14 +81,13 @@ export class BaseOAuthService {
 		}
 
 		const user = await userRequest.json()
-		user.access_token = tokens.access_token
 		const userData = await this.extractUserInfo(user)
 
 		return {
 			...userData,
 			access_token: tokens.access_token,
 			refresh_token: tokens.refresh_token,
-			expires_at: expiresAt,
+			expires_at: tokens.expires_at || tokens.expires_in,
 			provider: this.options.name
 		}
 	}

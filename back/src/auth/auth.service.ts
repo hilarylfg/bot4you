@@ -72,32 +72,34 @@ export class AuthService {
 		const providerInstance = this.providerService.findByService(provider)
 		const profile = await providerInstance.findUserByCode(code)
 
-		if (!profile.email) {
-			throw new ConflictException(
-				'Не удалось получить email от провайдера. Убедитесь, что email в вашем профиле является публичным и подтвержденным.'
-			)
-		}
-
 		const account = await this.prismaService.account.findFirst({
 			where: {
 				id: profile.id,
 				provider: profile.provider
-			},
-			include: {
-				user: true
 			}
 		})
 
-		if (account) {
-			return this.saveSession(req, account.user)
+		let user = account?.userId
+			? await this.userService.findById(account.userId)
+			: null
+
+		if (user) {
+			return this.saveSession(req, user)
 		}
 
-		const existingUser = await this.userService.findByEmail(profile.email)
+		user = await this.userService.create(
+			profile.email,
+			'',
+			profile.name,
+			profile.picture,
+			AuthMethod[profile.provider.toUpperCase()],
+			true
+		)
 
-		if (existingUser) {
+		if (!account) {
 			await this.prismaService.account.create({
 				data: {
-					userId: existingUser.id,
+					userId: user.id,
 					type: 'oauth',
 					provider: profile.provider,
 					accessToken: profile.access_token,
@@ -105,33 +107,9 @@ export class AuthService {
 					expiresAt: profile.expires_at
 				}
 			})
-
-			return this.saveSession(req, existingUser)
 		}
 
-		const newUser = await this.userService.create(
-			profile.email,
-			'',
-			profile.name,
-			profile.picture,
-			AuthMethod[
-				profile.provider.toUpperCase() as keyof typeof AuthMethod
-			],
-			true
-		)
-
-		await this.prismaService.account.create({
-			data: {
-				userId: newUser.id,
-				type: 'oauth',
-				provider: profile.provider,
-				accessToken: profile.access_token,
-				refreshToken: profile.refresh_token,
-				expiresAt: profile.expires_at
-			}
-		})
-
-		return this.saveSession(req, newUser)
+		return this.saveSession(req, user)
 	}
 
 	public async logout(req: Request, res: Response): Promise<void> {
