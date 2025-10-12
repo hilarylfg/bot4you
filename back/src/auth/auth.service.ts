@@ -12,7 +12,9 @@ import { Request, Response } from 'express'
 
 import { LoginDto } from '@/auth/dto/login.dto'
 import { RegisterDto } from '@/auth/dto/register.dto'
+import { EmailConfirmationService } from '@/auth/email-confirmation/email-confirmation.service'
 import { ProviderService } from '@/auth/provider/provider.service'
+import { TwoFactorAuthService } from '@/auth/two-factor-auth/two-factor-auth.service'
 import { PrismaService } from '@/prisma/prisma.service'
 import { UserService } from '@/user/user.service'
 
@@ -22,7 +24,9 @@ export class AuthService {
 		private readonly prismaService: PrismaService,
 		private readonly userService: UserService,
 		private readonly configService: ConfigService,
-		private readonly providerService: ProviderService
+		private readonly providerService: ProviderService,
+		private readonly emailConfirmationService: EmailConfirmationService,
+		private readonly twoFactorAuthService: TwoFactorAuthService
 	) {}
 
 	public async register(dto: RegisterDto) {
@@ -34,7 +38,7 @@ export class AuthService {
 			)
 		}
 
-		return await this.userService.create(
+		const newUser = await this.userService.create(
 			dto.email,
 			dto.password,
 			dto.name,
@@ -42,6 +46,13 @@ export class AuthService {
 			AuthMethod.CREDENTIALS,
 			false
 		)
+
+		await this.emailConfirmationService.sendVerificationToken(newUser.email)
+
+		return {
+			message:
+				'Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
+		}
 	}
 
 	public async login(req: Request, dto: LoginDto) {
@@ -58,6 +69,31 @@ export class AuthService {
 		if (!isValidPassword) {
 			throw new UnauthorizedException(
 				'Неверный пароль. Пожалуйста, попробуйте еще раз или восстановите пароль, если забыли его.'
+			)
+		}
+
+		if (!user.isVerified) {
+			await this.emailConfirmationService.sendVerificationToken(
+				user.email
+			)
+			throw new UnauthorizedException(
+				'Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес.'
+			)
+		}
+
+		if (user.isTwoFactorEnabled) {
+			if (!dto.code) {
+				await this.twoFactorAuthService.sendTwoFactorToken(user.email)
+
+				return {
+					message:
+						'Проверьте вашу почту. Требуется код двухфакторной аутентификации.'
+				}
+			}
+
+			await this.twoFactorAuthService.validateTwoFactorToken(
+				user.email,
+				dto.code
 			)
 		}
 
