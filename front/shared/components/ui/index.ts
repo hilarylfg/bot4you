@@ -19,3 +19,13 @@ export {
 export { Label } from './label'
 export { Input } from './input'
 export { Squares } from './squares-bg'
+export {
+	useFormField,
+	Form,
+	FormItem,
+	FormLabel,
+	FormControl,
+	FormDescription,
+	FormMessage,
+	FormField
+} from './form'

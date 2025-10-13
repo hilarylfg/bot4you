@@ -4,6 +4,8 @@ import { hash } from 'argon2'
 
 import { PrismaService } from '@/prisma/prisma.service'
 
+import { UpdateUserDto } from './dto/update-user.dto'
+
 @Injectable()
 export class UserService {
 	public constructor(private readonly prismaService: PrismaService) {}
@@ -20,7 +22,7 @@ export class UserService {
 
 		if (!user) {
 			throw new NotFoundException(
-				`Пользователь с ID ${id} не найден. Пожалуйста, проверьте введённые данные`
+				'Пользователь не найден. Пожалуйста, проверьте введенные данные.'
 			)
 		}
 
@@ -48,7 +50,7 @@ export class UserService {
 		method: AuthMethod,
 		isVerified: boolean
 	) {
-		return this.prismaService.user.create({
+		const user = await this.prismaService.user.create({
 			data: {
 				email,
 				password: password ? await hash(password) : '',
@@ -61,5 +63,24 @@ export class UserService {
 				accounts: true
 			}
 		})
+
+		return user
+	}
+
+	public async update(userId: string, dto: UpdateUserDto) {
+		const user = await this.findById(userId)
+
+		const updatedUser = await this.prismaService.user.update({
+			where: {
+				id: user.id
+			},
+			data: {
+				email: dto.email,
+				displayName: dto.name,
+				isTwoFactorEnabled: dto.isTwoFactorEnabled
+			}
+		})
+
+		return updatedUser
 	}
 }

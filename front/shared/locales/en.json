@@ -38,7 +38,8 @@
     "fields": {
       "email": "Email",
       "password": "Password",
-      "repeatPassword": "Confirm password"
+      "passwordRepeat": "Confirm password",
+      "name": "Name"
     },
     "shared": {
       "orContinue": "Continue with",

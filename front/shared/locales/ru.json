@@ -38,7 +38,8 @@
     "fields": {
       "email": "E-mail",
       "password": "Пароль",
-      "repeatPassword": "Повторите пароль"
+      "passwordRepeat": "Повторите пароль",
+      "name": "Имя"
     },
     "shared": {
       "orContinue": "Продолжить при помощи",

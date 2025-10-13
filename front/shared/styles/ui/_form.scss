@@ -1,0 +1,20 @@
+.form-item {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.form-label {
+    &[data-error="true"] {
+        color: var(--error);
+    }
+}
+
+.form-description {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.form-message {
+    color: var(--error);
+    font-size: 0.875rem;
+}
