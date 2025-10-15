@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { toast } from 'sonner'
 
 import { TypeLoginSchema } from '@/shared/schemas'
@@ -12,15 +12,28 @@ export function useLoginMutation(
 ) {
 	const router = useRouter()
 
-	const { mutate: login, isPending: isLoadingLogin } = useMutation({
+	const [isOtpSuccess, setIsOtpSuccess] = useState(false)
+
+	const {
+		mutate: login,
+		isPending: isLoadingLogin,
+		isError
+	} = useMutation({
 		mutationKey: ['login user'],
-		mutationFn: ({ values }: { values: TypeLoginSchema }) =>
-			authService.login(values),
-		onSuccess(data: any) {
+		mutationFn: ({ values }: { values: TypeLoginSchema }) => {
+			if (values.code) {
+				setIsOtpSuccess(false)
+			}
+			return authService.login(values)
+		},
+		onSuccess(data: any, variables) {
 			if (data.message) {
 				toastMessageHandler(data)
 				setIsShowFactor(true)
 			} else {
+				if (variables.values.code) {
+					setIsOtpSuccess(true)
+				}
 				toast.success('Успешная авторизация')
 				router.push('/')
 			}
@@ -30,5 +43,5 @@ export function useLoginMutation(
 		}
 	})
 
-	return { login, isLoadingLogin }
+	return { login, isLoadingLogin, isError, isOtpSuccess }
 }

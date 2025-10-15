@@ -5,6 +5,11 @@
     flex-direction: column;
     gap: 1.5rem;
 
+    &__dialog-content {
+        display: flex;
+        justify-content: center;
+    }
+
     &__card {
         overflow: hidden;
         background: var(--bg-primary);

@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -11,13 +11,20 @@ import {
 	AuthHeader,
 	AuthSocialButtons,
 	Button,
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
 	Form,
 	FormControl,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
-	Input
+	Input,
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot
 } from '@/shared/components'
 import { useLoginMutation } from '@/shared/hooks'
 import { LoginSchema, TypeLoginSchema } from '@/shared/schemas'
@@ -30,38 +37,78 @@ export function LoginForm() {
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
 			email: '',
-			password: ''
+			password: '',
+			code: ''
 		}
 	})
 
-	const { login, isLoadingLogin } = useLoginMutation(setIsShowFactor)
+	const { login, isLoadingLogin, isError, isOtpSuccess } =
+		useLoginMutation(setIsShowFactor)
+
+	const otpValue = form.watch('code')
+
+	useEffect(() => {
+		if (otpValue && otpValue.length === 6 && isShowTwoFactor) {
+			const formValues = form.getValues()
+			onSubmit(formValues)
+		}
+	}, [otpValue, isShowTwoFactor])
 
 	const onSubmit = (values: TypeLoginSchema) => {
 		login({ values })
 	}
 
+	const getSlotClass = () => {
+		if (isLoadingLogin) return 'loading'
+		if (isError) return 'error'
+		if (isOtpSuccess && !isLoadingLogin && !isError) return 'success'
+		return ''
+	}
+
 	return (
 		<Form {...form}>
 			<AuthHeader type='login' />
-			{isShowTwoFactor && (
-				<FormField
-					control={form.control}
-					name='code'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Код</FormLabel>
-							<FormControl>
-								<Input
-									placeholder='123456'
-									disabled={isLoadingLogin}
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-			)}
+			<Dialog open={isShowTwoFactor}>
+				<DialogContent
+					className='auth-form__dialog-content'
+					showCloseButton={false}
+				>
+					<DialogHeader>
+						<DialogTitle>
+							Код двухфакторной аутентификации
+						</DialogTitle>
+						<FormField
+							control={form.control}
+							name='code'
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<InputOTP
+											className='auth-form__input-code'
+											maxLength={6}
+											disabled={isLoadingLogin}
+											{...field}
+										>
+											<InputOTPGroup>
+												{[0, 1, 2, 3, 4, 5].map(
+													index => (
+														<InputOTPSlot
+															key={index}
+															index={index}
+															className={getSlotClass()}
+														/>
+													)
+												)}
+											</InputOTPGroup>
+										</InputOTP>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</DialogHeader>
+				</DialogContent>
+			</Dialog>
 			<FormField
 				control={form.control}
 				name='email'
