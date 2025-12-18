@@ -73,40 +73,88 @@ export function LoginForm() {
 					className='auth-form__dialog-content'
 					showCloseButton={false}
 				>
-					<DialogHeader>
-						<DialogTitle>
-							Код двухфакторной аутентификации
-						</DialogTitle>
-						<FormField
-							control={form.control}
-							name='code'
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<InputOTP
-											className='auth-form__input-code'
-											maxLength={6}
-											disabled={isLoadingLogin}
-											{...field}
-										>
-											<InputOTPGroup>
-												{[0, 1, 2, 3, 4, 5].map(
-													index => (
-														<InputOTPSlot
-															key={index}
-															index={index}
-															className={getSlotClass()}
-														/>
-													)
-												)}
-											</InputOTPGroup>
-										</InputOTP>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</DialogHeader>
+					<div className='auth-form__dialog-header'>
+						<div className='auth-form__dialog-icon'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								strokeWidth={2}
+								stroke='currentColor'
+							>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									d='M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z'
+								/>
+							</svg>
+						</div>
+						<DialogHeader>
+							<DialogTitle className='auth-form__dialog-title'>
+								{t('auth.twoFactor.title')}
+							</DialogTitle>
+							<p className='auth-form__dialog-description'>
+								{t('auth.twoFactor.description')}
+							</p>
+						</DialogHeader>
+					</div>
+
+					<FormField
+						control={form.control}
+						name='code'
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<InputOTP
+										className='auth-form__input-code'
+										maxLength={6}
+										disabled={isLoadingLogin}
+										{...field}
+									>
+										<InputOTPGroup>
+											{[0, 1, 2, 3, 4, 5].map(index => (
+												<InputOTPSlot
+													key={index}
+													index={index}
+													className={getSlotClass()}
+												/>
+											))}
+										</InputOTPGroup>
+									</InputOTP>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<div className='auth-form__dialog-footer'>
+						<button
+							type='button'
+							className='auth-form__resend-button'
+							disabled={isLoadingLogin}
+							onClick={() => {
+								const formValues = form.getValues()
+								login({
+									values: {
+										email: formValues.email,
+										password: formValues.password
+									}
+								})
+							}}
+						>
+							{t('auth.twoFactor.resend')}
+						</button>
+						<button
+							type='button'
+							className='auth-form__cancel-button'
+							onClick={() => {
+								setIsShowFactor(false)
+								form.setValue('code', '')
+							}}
+						>
+							{t('common.actions.cancel')}
+						</button>
+					</div>
 				</DialogContent>
 			</Dialog>
 			<FormField

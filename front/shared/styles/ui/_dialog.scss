@@ -17,7 +17,8 @@
     left: 50%;
     top: 50%;
     z-index: 50;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     width: fit-content;
     max-width: 90%;
     max-height: 90vh;
@@ -67,11 +68,8 @@
 
 .dialog-ui-title {
     font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.025em;
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     color: var(--text-primary);
-    margin-bottom: 15px;
 }
 
 .dialog-ui-description {
@@ -96,12 +94,11 @@
     }
 
     &:hover {
-        transform: scale(1.2);
+        transform: scale(1.1);
     }
 
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 2px var(--text-primary), 0 0 0 4px #fff;
     }
 
     &:disabled {

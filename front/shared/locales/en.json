@@ -41,6 +41,10 @@
       "passwordRepeat": "Confirm password",
       "name": "Name"
     },
+    "actions": {
+      "login": "Sign in",
+      "logout": "Log out"
+    },
     "shared": {
       "orContinue": "Continue with",
       "youAgree": "By continuing, you agree to our",
@@ -59,6 +63,11 @@
     "cta": {
       "toSignup": "Don't have an account?",
       "toLogin": "Already have an account?"
+    },
+    "twoFactor": {
+      "title": "Two-Factor Authentication",
+      "description": "Enter the 6-digit code sent to your email",
+      "resend": "Resend code"
     }
   },
   "screens": {
@@ -69,5 +78,48 @@
   },
   "placeholders": {
     "question": "Type your question here..."
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "general": "General",
+      "profile": "Profile"
+    },
+    "general": {
+      "theme": {
+        "title": "Theme",
+        "description": "Choose the appearance of the app",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "language": {
+        "title": "Language",
+        "description": "Select the app interface language"
+      }
+    },
+    "profile": {
+      "account": {
+        "title": "Account Settings",
+        "description": "Manage your account information",
+        "nameInfo": "Name displayed in your profile",
+        "emailInfo": "Email for account login"
+      },
+      "data": {
+        "title": "Data Management",
+        "description": "Configure what data to save",
+        "saveHistory": "Save chat history",
+        "saveResponses": "Save bot responses"
+      },
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "twoFactor": "Two-factor Authentication",
+        "twoFactorDescription": "Enable two-factor authentication for your account"
+      },
+      "actions": {
+        "save": "Save"
+      }
+    }
   }
 }

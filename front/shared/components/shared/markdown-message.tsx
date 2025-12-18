@@ -1,8 +1,9 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export function MarkdownMessage({ content }: Props) {
+	const { resolvedTheme } = useTheme()
+
 	return (
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm]}
@@ -20,7 +23,7 @@ export function MarkdownMessage({ content }: Props) {
 					return match ? (
 						<SyntaxHighlighter
 							language={match[1]}
-							style={dark}
+							style={resolvedTheme === 'dark' ? vscDarkPlus : vs}
 							PreTag='div'
 							customStyle={{
 								background: 'transparent',

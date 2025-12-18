@@ -36,8 +36,18 @@
         margin-bottom: 1.5rem;
         flex-shrink: 0;
 
-        @include mobile {
-            margin-bottom: 1rem;
+        &-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    }
+
+    &__sidebar-trigger {
+        display: none;
+
+        @include laptop {
+            display: flex;
         }
     }
 
@@ -82,19 +92,6 @@
     &__thinking {
         color: var(--text-secondary);
         animation: pulse 1.5s infinite;
-    }
-
-    &__title {
-        display: flex;
-        align-items: start;
-        gap: 0.3rem;
-        font-size: 2rem;
-        font-weight: bold;
-        user-select: none;
-
-        svg {
-            color: var(--accent-primary);
-        }
     }
 
     &__history {

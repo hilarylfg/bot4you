@@ -1,9 +1,14 @@
 'use client'
 
-import { Bot, Trash } from 'lucide-react'
+import { Trash } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-import { Button, Container, LanguageSwitch } from '@/shared/components'
+import {
+	Button,
+	Container,
+	LanguageSwitch,
+	SidebarTrigger
+} from '@/shared/components'
 
 interface ChatHeaderProps {
 	hasMessages: boolean
@@ -16,10 +21,9 @@ export function ChatHeader({ hasMessages, onClear, error }: ChatHeaderProps) {
 	return (
 		<Container>
 			<div className='chat__header'>
-				<h1 className='chat__title'>
-					<Bot size={40} /> {t('app.name')}
-				</h1>
-				<LanguageSwitch />
+				<div className='chat__header-left'>
+					<SidebarTrigger className='chat__sidebar-trigger' />
+				</div>
 				{hasMessages && (
 					<Button onClick={onClear} variant='outline'>
 						<Trash size={16} />{' '}

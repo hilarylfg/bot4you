@@ -5,8 +5,6 @@ import { ThemeProvider } from 'next-themes'
 import { PropsWithChildren, useState } from 'react'
 import { Toaster } from 'sonner'
 
-import { ThemeSwitch } from '@/shared/components'
-
 export function Providers({ children }: PropsWithChildren) {
 	const [queryClient] = useState(
 		() =>
@@ -28,7 +26,6 @@ export function Providers({ children }: PropsWithChildren) {
 					enableSystem
 					disableTransitionOnChange
 				>
-					<ThemeSwitch />
 					{children}
 					<Toaster position='top-center' />
 				</ThemeProvider>

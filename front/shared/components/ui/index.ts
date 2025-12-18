@@ -47,3 +47,69 @@ export {
 	InputOTPSlot,
 	InputOTPSeparator
 } from './input-otp'
+export {
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupAction,
+	SidebarGroupContent,
+	SidebarGroupLabel,
+	SidebarHeader,
+	SidebarInput,
+	SidebarInset,
+	SidebarMenu,
+	SidebarMenuAction,
+	SidebarMenuBadge,
+	SidebarMenuButton,
+	SidebarMenuItem,
+	SidebarMenuSkeleton,
+	SidebarMenuSub,
+	SidebarMenuSubButton,
+	SidebarMenuSubItem,
+	SidebarProvider,
+	SidebarRail,
+	SidebarSeparator,
+	SidebarTrigger,
+	useSidebar
+} from './sidebar'
+export { Separator } from './separator'
+export {
+	Sheet,
+	SheetTrigger,
+	SheetClose,
+	SheetPortal,
+	SheetContent,
+	SheetHeader,
+	SheetFooter,
+	SheetTitle,
+	SheetDescription
+} from './sheet'
+export {
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+	TooltipProvider
+} from './tooltip'
+export { Skeleton } from './skeleton'
+export { Avatar, AvatarImage, AvatarFallback } from './avatar'
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
+export {
+	DropdownMenu,
+	DropdownMenuTrigger,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuCheckboxItem,
+	DropdownMenuRadioItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuShortcut,
+	DropdownMenuGroup,
+	DropdownMenuPortal,
+	DropdownMenuSub,
+	DropdownMenuSubTrigger,
+	DropdownMenuSubContent,
+	DropdownMenuRadioGroup
+} from './dropdown'
+export { Spinner } from './spinner'
+export { Switch } from './switch'

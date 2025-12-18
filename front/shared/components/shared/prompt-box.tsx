@@ -39,7 +39,7 @@ export function PromptBox({
 	const [input, setInput] = useState('')
 
 	const { isStreaming, start } = useChatStreaming({
-		model: 'qwen/qwen3-30b-a3b:free',
+		model: 'google/gemma-3-27b-it:free',
 		referer:
 			typeof window !== 'undefined' ? window.location.origin : undefined
 	})

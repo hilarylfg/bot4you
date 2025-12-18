@@ -6,7 +6,7 @@ import {
 	UnauthorizedException
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { AuthMethod, User } from '@prisma/__generated__'
+import { AuthMethod, PrismaClient, User } from '@prisma/__generated__'
 import { verify } from 'argon2'
 import { Request, Response } from 'express'
 
@@ -38,20 +38,36 @@ export class AuthService {
 			)
 		}
 
-		const newUser = await this.userService.create(
-			dto.email,
-			dto.password,
-			dto.name,
-			'',
-			AuthMethod.CREDENTIALS,
-			false
-		)
+		try {
+			await this.prismaService.$transaction(async (tx: PrismaClient) => {
+				const user = await this.userService.createWithTransaction(
+					tx,
+					dto.email,
+					dto.password,
+					dto.name,
+					'',
+					AuthMethod.CREDENTIALS,
+					false
+				)
 
-		await this.emailConfirmationService.sendVerificationToken(newUser.email)
+				await this.emailConfirmationService.sendVerificationToken(
+					user.email
+				)
 
-		return {
-			message:
-				'Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
+				return user
+			})
+
+			return {
+				message:
+					'Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
+			}
+		} catch (err: unknown) {
+			if (err instanceof Error && err.message.includes('Timeout')) {
+				throw new InternalServerErrorException(
+					'Не удалось отправить письмо с подтверждением. Пожалуйста, проверьте настройки почты и попробуйте снова.'
+				)
+			}
+			throw err
 		}
 	}
 
