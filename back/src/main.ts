@@ -2,14 +2,17 @@ import { ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import RedisStore from 'connect-redis'
-import * as cookieParser from 'cookie-parser'
-import * as session from 'express-session'
+import * as cookieParserImport from 'cookie-parser'
+import * as sessionImport from 'express-session'
 import IORedis from 'ioredis'
 
 import { ms, StringValue } from '@/libs/common/utils/ms.util'
 import { parseBoolean } from '@/libs/common/utils/parse-boolean.util'
 
 import { AppModule } from './app.module'
+
+const cookieParser = cookieParserImport as any
+const session = sessionImport as any
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
