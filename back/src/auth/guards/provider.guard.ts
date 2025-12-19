@@ -4,7 +4,6 @@ import {
 	Injectable,
 	NotFoundException
 } from '@nestjs/common'
-import { Request } from 'express'
 
 import { ProviderService } from '../provider/provider.service'
 

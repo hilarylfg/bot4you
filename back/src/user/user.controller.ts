@@ -8,9 +8,8 @@ import {
 	Patch
 } from '@nestjs/common'
 import { UserRole } from '@prisma/client'
-
-import { Authorization } from '../auth/decorators/auth.decorator'
-import { Authorized } from '../auth/decorators/authorized.decorator'
+import { Authorization } from 'src/auth/decorators/auth.decorator'
+import { Authorized } from 'src/auth/decorators/authorized.decorator'
 
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserService } from './user.service'

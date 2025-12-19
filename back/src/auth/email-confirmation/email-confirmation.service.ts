@@ -7,11 +7,11 @@ import {
 } from '@nestjs/common'
 import { TokenType } from '@prisma/client'
 import { Request } from 'express'
+import { MailService } from 'src/libs/mail/mail.service'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { UserService } from 'src/user/user.service'
 import { v4 as uuidv4 } from 'uuid'
 
-import { MailService } from '../../libs/mail/mail.service'
-import { PrismaService } from '../../prisma/prisma.service'
-import { UserService } from '../../user/user.service'
 import { AuthService } from '../auth.service'
 
 import { ConfirmationDto } from './dto/confirmation.dto'
