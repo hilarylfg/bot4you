@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ValidationPipe } from '@nestjs/common'
+import { INestApplication } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { ExpressAdapter } from '@nestjs/platform-express'
 import RedisStore from 'connect-redis'
 import * as cookieParserImport from 'cookie-parser'
-import express from 'express'
+import express, { Request, Response } from 'express'
 import * as sessionImport from 'express-session'
 import IORedis from 'ioredis'
 
@@ -16,14 +20,14 @@ import { AppModule } from './app.module'
 const cookieParser = cookieParserImport as any
 const session = sessionImport as any
 
-const expressApp = express()
-let cachedApp: any = null
+let cachedApp: INestApplication | null = null
 
-async function bootstrapServer() {
+async function bootstrapServer(): Promise<INestApplication> {
 	if (cachedApp) {
 		return cachedApp
 	}
 
+	const expressApp = express()
 	const app = await NestFactory.create(
 		AppModule,
 		new ExpressAdapter(expressApp)
@@ -72,12 +76,13 @@ async function bootstrapServer() {
 
 	await app.init()
 
-	cachedApp = expressApp
-	return expressApp
+	cachedApp = app
+	return app
 }
 
-export default async (req: any, res: any): Promise<any> => {
+export default async (req: Request, res: Response): Promise<void> => {
 	const app = await bootstrapServer()
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-	return app(req, res)
+	const httpAdapter = app.getHttpAdapter()
+	const instance = httpAdapter.getInstance()
+	return instance(req, res)
 }
