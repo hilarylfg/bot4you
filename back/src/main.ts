@@ -5,7 +5,6 @@ import RedisStore from 'connect-redis'
 import * as cookieParserImport from 'cookie-parser'
 import * as sessionImport from 'express-session'
 import IORedis from 'ioredis'
-import 'tsconfig-paths/register'
 
 import { ms, StringValue } from '@/libs/common/utils/ms.util'
 import { parseBoolean } from '@/libs/common/utils/parse-boolean.util'
