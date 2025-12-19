@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 import { Nunito } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { ReactNode } from 'react'
@@ -30,13 +31,12 @@ export default async function LocaleLayout({
 		notFound()
 	}
 
-	// Загружаем переводы для текущей локали
-	const messages = (await import(`@/shared/locales/${locale}.json`)).default
+	const messages = await getMessages()
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
 			<body className={nunito.variable}>
-				<NextIntlClientProvider messages={messages} locale={locale}>
+				<NextIntlClientProvider messages={messages}>
 					<Providers>{children}</Providers>
 				</NextIntlClientProvider>
 			</body>
