@@ -10,13 +10,14 @@ import { AuthMethod, PrismaClient, User } from '@prisma/__generated__'
 import { verify } from 'argon2'
 import { Request, Response } from 'express'
 
-import { LoginDto } from '@/auth/dto/login.dto'
-import { RegisterDto } from '@/auth/dto/register.dto'
-import { EmailConfirmationService } from '@/auth/email-confirmation/email-confirmation.service'
-import { ProviderService } from '@/auth/provider/provider.service'
-import { TwoFactorAuthService } from '@/auth/two-factor-auth/two-factor-auth.service'
-import { PrismaService } from '@/prisma/prisma.service'
-import { UserService } from '@/user/user.service'
+import { PrismaService } from '../prisma/prisma.service'
+import { UserService } from '../user/user.service'
+
+import { LoginDto } from './dto/login.dto'
+import { RegisterDto } from './dto/register.dto'
+import { EmailConfirmationService } from './email-confirmation/email-confirmation.service'
+import { ProviderService } from './provider/provider.service'
+import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service'
 
 @Injectable()
 export class AuthService {

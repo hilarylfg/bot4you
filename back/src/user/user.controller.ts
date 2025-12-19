@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common'
 import { UserRole } from '@prisma/__generated__'
 
-import { Authorization } from '@/auth/decorators/auth.decorator'
-import { Authorized } from '@/auth/decorators/authorized.decorator'
+import { Authorization } from '../auth/decorators/auth.decorator'
+import { Authorized } from '../auth/decorators/authorized.decorator'
 
 import { UpdateUserDto } from './dto/update-user.dto'
 import { UserService } from './user.service'

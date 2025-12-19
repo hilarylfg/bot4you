@@ -15,12 +15,11 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { Request, Response } from 'express'
 
-import { LoginDto } from '@/auth/dto/login.dto'
-import { RegisterDto } from '@/auth/dto/register.dto'
-import { ProviderService } from '@/auth/provider/provider.service'
-
 import { AuthService } from './auth.service'
+import { LoginDto } from './dto/login.dto'
+import { RegisterDto } from './dto/register.dto'
 import { AuthProviderGuard } from './guards/provider.guard'
+import { ProviderService } from './provider/provider.service'
 
 @Controller('auth')
 export class AuthController {

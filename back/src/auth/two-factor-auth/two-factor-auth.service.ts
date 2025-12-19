@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common'
 import { TokenType } from '@prisma/__generated__'
 
-import { MailService } from '@/libs/mail/mail.service'
-import { PrismaService } from '@/prisma/prisma.service'
+import { MailService } from '../../libs/mail/mail.service'
+import { PrismaService } from '../../prisma/prisma.service'
 
 @Injectable()
 export class TwoFactorAuthService {
