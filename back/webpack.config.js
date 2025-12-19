@@ -16,11 +16,23 @@ module.exports = function (options, webpack) {
 			path: path.resolve(__dirname, 'dist')
 		},
 		resolve: {
-			extensions: ['.ts', '.js'],
+			extensions: ['.tsx', '.ts', '.jsx', '.js'],
 			plugins: [
 				new TsconfigPathsPlugin({
 					configFile: './tsconfig.json'
 				})
+			],
+			alias: {
+				'@': path.resolve(__dirname, 'src')
+			}
+		},
+		module: {
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: 'ts-loader',
+					exclude: /node_modules/
+				}
 			]
 		}
 	}

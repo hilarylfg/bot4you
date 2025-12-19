@@ -3,10 +3,9 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { render } from '@react-email/components'
 
-import { ResetPasswordTemplate } from '@/libs/mail/templates/reset-password.template'
-import { TwoFactorAuthTemplate } from '@/libs/mail/templates/two-factor-auth.template'
-
 import { ConfirmationTemplate } from './templates/confirmation.template'
+import { ResetPasswordTemplate } from './templates/reset-password.template'
+import { TwoFactorAuthTemplate } from './templates/two-factor-auth.template'
 
 @Injectable()
 export class MailService {
