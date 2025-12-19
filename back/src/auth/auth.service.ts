@@ -9,8 +9,9 @@ import { ConfigService } from '@nestjs/config'
 import { AuthMethod, PrismaClient, User } from '@prisma/client'
 import { verify } from 'argon2'
 import { Request, Response } from 'express'
-import { PrismaService } from 'src/prisma/prisma.service'
-import { UserService } from 'src/user/user.service'
+
+import { PrismaService } from '../prisma/prisma.service'
+import { UserService } from '../user/user.service'
 
 import { LoginDto } from './dto/login.dto'
 import { RegisterDto } from './dto/register.dto'
