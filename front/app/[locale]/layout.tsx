@@ -30,10 +30,13 @@ export default async function LocaleLayout({
 		notFound()
 	}
 
+	// Загружаем переводы для текущей локали
+	const messages = (await import(`@/shared/locales/${locale}.json`)).default
+
 	return (
 		<html lang={locale} suppressHydrationWarning>
 			<body className={nunito.variable}>
-				<NextIntlClientProvider>
+				<NextIntlClientProvider messages={messages} locale={locale}>
 					<Providers>{children}</Providers>
 				</NextIntlClientProvider>
 			</body>
