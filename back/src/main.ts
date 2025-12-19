@@ -1,19 +1,23 @@
-import { ValidationPipe } from '@nestjs/common'
+import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import RedisStore from 'connect-redis'
-import * as cookieParserImport from 'cookie-parser'
-import * as sessionImport from 'express-session'
+import * as cookieParser from 'cookie-parser'
+import type { Express, Request, Response } from 'express'
+import * as session from 'express-session'
 import IORedis from 'ioredis'
 
 import { AppModule } from './app.module'
 import { ms, StringValue } from './libs/common/utils/ms.util'
 import { parseBoolean } from './libs/common/utils/parse-boolean.util'
 
-const cookieParser = cookieParserImport as any
-const session = sessionImport as any
+let cachedApp: INestApplication | null = null
 
-async function bootstrap() {
+async function bootstrap(): Promise<INestApplication> {
+	if (cachedApp) {
+		return cachedApp
+	}
+
 	const app = await NestFactory.create(AppModule)
 
 	const config = app.get(ConfigService)
@@ -57,7 +61,30 @@ async function bootstrap() {
 		exposedHeaders: ['set-cookie']
 	})
 
-	await app.listen(config.getOrThrow<number>('APPLICATION_PORT'))
+	await app.init()
+
+	cachedApp = app
+	return app
 }
 
-void bootstrap()
+if (process.env.NODE_ENV !== 'production') {
+	void bootstrap()
+		.then(app => {
+			const config = app.get(ConfigService)
+			const portRaw = config.get('APPLICATION_PORT')
+			const port =
+				typeof portRaw === 'string'
+					? parseInt(portRaw, 10)
+					: Number(portRaw)
+			app.listen(port)
+		})
+		.catch(err => {
+			console.error('Failed to start dev server:', err)
+		})
+}
+
+export default async (req: Request, res: Response) => {
+	const app = await bootstrap()
+	const expressApp = app.getHttpAdapter().getInstance() as unknown as Express
+	return expressApp(req, res)
+}
