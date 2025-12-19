@@ -1,5 +1,3 @@
-'use client'
-
 import { Chat, LogoLoaderShell, Menu } from '@/shared/components'
 
 export default function Page() {

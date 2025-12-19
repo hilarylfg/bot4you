@@ -1,9 +1,9 @@
 'use client'
 
-import { Bot, LogIn, LogOut, Settings } from 'lucide-react'
+import { Bot, LogIn, LogOut, Settings, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 import {
 	Avatar,
@@ -33,8 +33,13 @@ interface MenuProps {
 
 export function Menu({ children }: MenuProps) {
 	const t = useTranslations()
+	const [mounted, setMounted] = useState(false)
 	const { user } = useProfileInfo()
 	const { logout, isLoadingLogout } = useLogoutMutation()
+
+	useEffect(() => {
+		setMounted(true)
+	}, [])
 
 	const [isOpen, setIsOpen] = useState(false)
 
@@ -59,7 +64,9 @@ export function Menu({ children }: MenuProps) {
 				</SidebarContent>
 				<SidebarFooter>
 					<div className='menu__footer'>
-						{user ? (
+						{!mounted ? (
+							<User size={24} />
+						) : user ? (
 							<DropdownMenu>
 								<div className='menu__user-wrapper'>
 									<DropdownMenuTrigger className='menu__user-trigger'>
