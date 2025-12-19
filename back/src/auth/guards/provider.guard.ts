@@ -13,7 +13,7 @@ export class AuthProviderGuard implements CanActivate {
 	public constructor(private readonly providerService: ProviderService) {}
 
 	public canActivate(context: ExecutionContext) {
-		const request = context.switchToHttp().getRequest() as Request
+		const request = context.switchToHttp().getRequest()
 
 		const provider = request.params.provider
 
