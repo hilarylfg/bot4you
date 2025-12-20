@@ -44,7 +44,7 @@ export function Menu({ children }: MenuProps) {
 	const [isOpen, setIsOpen] = useState(false)
 
 	return (
-		<SidebarProvider defaultOpen={false}>
+		<SidebarProvider>
 			<Dialog open={isOpen} onOpenChange={setIsOpen}>
 				<DialogContent className='menu__dialog-content'>
 					<DialogTitle>{t('settings.title')}</DialogTitle>
