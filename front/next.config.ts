@@ -5,8 +5,6 @@ const nextConfig: NextConfig = {
 	poweredByHeader: false,
 	compress: true,
 	experimental: {
-		turbopackFileSystemCacheForBuild: false,
-		turbopackFileSystemCacheForDev: false,
 		optimizePackageImports: ['lucide-react', '@radix-ui/react-icons']
 	}
 }
