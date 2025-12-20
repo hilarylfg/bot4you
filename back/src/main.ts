@@ -36,6 +36,18 @@ async function bootstrap(): Promise<INestApplication> {
 		})
 	)
 
+	const rawSameSite = config.get<string>('SESSION_SAME_SITE') ?? 'lax'
+	const sameSite = (
+		['lax', 'none', 'strict'].includes(rawSameSite.toLowerCase())
+			? rawSameSite.toLowerCase()
+			: 'lax'
+	) as 'lax' | 'none' | 'strict'
+	const sessionDomain = config.get<string>('SESSION_DOMAIN') || undefined
+	const sessionSecure =
+		sameSite === 'none'
+			? true
+			: parseBoolean(config.getOrThrow<string>('SESSION_SECURE'))
+
 	app.use(
 		session({
 			secret: config.getOrThrow<string>('SESSION_SECRET'),
@@ -43,15 +55,13 @@ async function bootstrap(): Promise<INestApplication> {
 			resave: true,
 			saveUninitialized: false,
 			cookie: {
-				domain: config.getOrThrow<string>('SESSION_DOMAIN'),
+				domain: sessionDomain,
 				maxAge: ms(config.getOrThrow<StringValue>('SESSION_MAX_AGE')),
 				httpOnly: parseBoolean(
 					config.getOrThrow<string>('SESSION_HTTP_ONLY')
 				),
-				secure: parseBoolean(
-					config.getOrThrow<string>('SESSION_SECURE')
-				),
-				sameSite: 'lax'
+				secure: sessionSecure,
+				sameSite
 			},
 			store: new RedisStore({
 				client: redis,
