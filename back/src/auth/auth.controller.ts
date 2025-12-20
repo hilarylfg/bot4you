@@ -45,7 +45,7 @@ export class AuthController {
 	@Get('/oauth/callback/:provider')
 	public async callback(
 		@Req() req: Request,
-		@Res({ passthrough: true }) res: Response,
+		@Res() res: Response,
 		@Query('code') code: string,
 		@Param('provider') provider: string
 	) {
@@ -57,9 +57,7 @@ export class AuthController {
 
 		await this.authService.extractProfileFromCode(req, provider, code)
 
-		return res.redirect(
-			`${this.configService.getOrThrow<string>('ALLOWED_ORIGINS')}`
-		)
+		res.redirect(this.configService.getOrThrow<string>('ALLOWED_ORIGINS'))
 	}
 
 	@UseGuards(AuthProviderGuard)
