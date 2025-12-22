@@ -30,6 +30,9 @@ async function bootstrap(): Promise<INestApplication> {
 
 	app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')))
 
+	const expressApp = app.getHttpAdapter().getInstance() as Express
+	expressApp.set('trust proxy', 1)
+
 	app.useGlobalPipes(
 		new ValidationPipe({
 			transform: true
