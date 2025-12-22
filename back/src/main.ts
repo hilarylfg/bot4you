@@ -76,7 +76,8 @@ async function bootstrap(): Promise<INestApplication> {
 	app.enableCors({
 		origin: config.getOrThrow<string>('ALLOWED_ORIGINS'),
 		credentials: true,
-		exposedHeaders: ['set-cookie']
+		exposedHeaders: ['set-cookie'],
+		methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
 	})
 
 	await app.init()
