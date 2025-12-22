@@ -1,6 +1,12 @@
 {
   "buildCommand": "next build",
   "framework": "nextjs",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://bot4you-backend.vercel.app/:match*"
+    }
+  ]
 }
 
