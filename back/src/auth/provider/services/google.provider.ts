@@ -11,8 +11,7 @@ export class GoogleProvider extends BaseOAuthService {
 			profile_url: 'https://www.googleapis.com/oauth2/v3/userinfo',
 			scopes: options.scopes,
 			client_id: options.client_id,
-			client_secret: options.client_secret,
-			redirect_base_url: options.redirect_base_url
+			client_secret: options.client_secret
 		})
 	}
 

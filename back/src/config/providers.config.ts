@@ -15,8 +15,7 @@ export const getProvidersConfig = (
 			client_secret: configService.getOrThrow<string>(
 				'GOOGLE_CLIENT_SECRET'
 			),
-			scopes: ['email', 'profile'],
-			redirect_base_url: 'https://bot4you-backend.vercel.app'
+			scopes: ['email', 'profile']
 		}),
 		new YandexProvider({
 			client_id: configService.getOrThrow<string>('YANDEX_CLIENT_ID'),

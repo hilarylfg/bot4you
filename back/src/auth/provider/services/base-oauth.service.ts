@@ -93,8 +93,7 @@ export class BaseOAuthService {
 	}
 
 	public getRedirectUrl() {
-		const redirectBase = this.options.redirect_base_url ?? this.BASE_URL
-		return `${redirectBase}/auth/oauth/callback/${this.options.name}`
+		return `${this.BASE_URL}/auth/oauth/callback/${this.options.name}`
 	}
 
 	set baseUrl(value: string) {
