@@ -43,8 +43,49 @@ export class MailService {
 		await this.sendMail(email, 'Подтверждение вашей личности', html)
 	}
 
-	private sendMail(email: string, subject: string, html: string) {
-		return this.mailerService.sendMail({
+	private async sendMail(
+		email: string,
+		subject: string,
+		html: string
+	): Promise<void> {
+		try {
+			const checkResp = await fetch(
+				`https://api.resend.com/contacts/${email}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${this.configService.getOrThrow<string>('MAIL_PASSWORD')}`
+					}
+				}
+			)
+
+			if (checkResp.status === 404) {
+				try {
+					await fetch('https://api.resend.com/contacts', {
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${this.configService.getOrThrow<string>('MAIL_PASSWORD')}`,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							email,
+							unsubscribed: true
+						})
+					})
+				} catch (err) {
+					console.warn('Failed to create contact on Resend:', err)
+				}
+			} else if (!checkResp.ok) {
+				console.warn(
+					'Unexpected response when checking contact on Resend:',
+					checkResp.status
+				)
+			}
+		} catch (err) {
+			console.warn('Failed to check contact on Resend:', err)
+		}
+
+		await this.mailerService.sendMail({
 			to: email,
 			subject,
 			html
