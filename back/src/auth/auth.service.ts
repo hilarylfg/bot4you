@@ -125,10 +125,12 @@ export class AuthService {
 		const providerInstance = this.providerService.findByService(provider)
 		const profile = await providerInstance.findUserByCode(code)
 
-		const account = await this.prismaService.account.findFirst({
+		const account = await this.prismaService.account.findUnique({
 			where: {
-				id: profile.id,
-				provider: profile.provider
+				provider_providerAccountId: {
+					provider: profile.provider,
+					providerAccountId: profile.id
+				}
 			}
 		})
 
@@ -149,18 +151,17 @@ export class AuthService {
 			true
 		)
 
-		if (!account) {
-			await this.prismaService.account.create({
-				data: {
-					userId: user.id,
-					type: 'oauth',
-					provider: profile.provider,
-					accessToken: profile.access_token,
-					refreshToken: profile.refresh_token,
-					expiresAt: profile.expires_at
-				}
-			})
-		}
+		await this.prismaService.account.create({
+			data: {
+				userId: user.id,
+				type: 'oauth',
+				provider: profile.provider,
+				providerAccountId: profile.id,
+				accessToken: profile.access_token,
+				refreshToken: profile.refresh_token,
+				expiresAt: profile.expires_at
+			}
+		})
 
 		return this.saveSession(req, user)
 	}
