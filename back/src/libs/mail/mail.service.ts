@@ -53,30 +53,69 @@ export class MailService {
 
 	// Checking for resend.com
 	public async sendTestEmail(email: string) {
-		try {
-			const checkResp = await fetch(
-				`https://api.resend.com/contacts/${email}`,
-				{
+		const apiKey = this.configService.getOrThrow<string>('MAIL_PASSWORD')
+
+		const checkContact = async () => {
+			try {
+				return await fetch(`https://api.resend.com/contacts/${email}`, {
 					method: 'GET',
 					headers: {
-						Authorization: `Bearer ${this.configService.getOrThrow<string>('MAIL_PASSWORD')}`
+						Authorization: `Bearer ${apiKey}`
 					}
-				}
-			)
+				})
+			} catch (err) {
+				console.warn(
+					'Failed to check contact on Resend (network):',
+					err
+				)
+				return null
+			}
+		}
+
+		try {
+			let checkResp = await checkContact()
+
+			if (checkResp === null) return false
 
 			if (checkResp.status === 404) {
 				try {
-					await fetch('https://api.resend.com/contacts', {
-						method: 'POST',
-						headers: {
-							Authorization: `Bearer ${this.configService.getOrThrow<string>('MAIL_PASSWORD')}`,
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							email,
-							unsubscribed: true
-						})
-					})
+					const createResp = await fetch(
+						'https://api.resend.com/contacts',
+						{
+							method: 'POST',
+							headers: {
+								Authorization: `Bearer ${apiKey}`,
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({
+								email,
+								unsubscribed: true
+							})
+						}
+					)
+
+					if (!createResp.ok) {
+						console.warn(
+							'Failed to create contact on Resend:',
+							createResp.status
+						)
+						return false
+					}
+
+					const maxAttempts = 6
+					const delayMs = 500
+					for (let i = 0; i < maxAttempts; i++) {
+						await new Promise(r => setTimeout(r, delayMs))
+						checkResp = await checkContact()
+						if (checkResp && checkResp.ok) {
+							return true
+						}
+					}
+
+					console.warn(
+						'Contact created but not available after polling'
+					)
+					return false
 				} catch (err) {
 					console.warn('Failed to create contact on Resend:', err)
 					return false
@@ -91,7 +130,7 @@ export class MailService {
 
 			return true
 		} catch (err) {
-			console.warn('Failed to check contact on Resend:', err)
+			console.warn('Failed to check/create contact on Resend:', err)
 			return false
 		}
 	}
