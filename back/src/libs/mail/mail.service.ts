@@ -43,11 +43,16 @@ export class MailService {
 		await this.sendMail(email, 'Подтверждение вашей личности', html)
 	}
 
-	private async sendMail(
-		email: string,
-		subject: string,
-		html: string
-	): Promise<void> {
+	private sendMail(email: string, subject: string, html: string) {
+		return this.mailerService.sendMail({
+			to: email,
+			subject,
+			html
+		})
+	}
+
+	// Checking for resend.com
+	public async sendTestEmail(email: string) {
 		try {
 			const checkResp = await fetch(
 				`https://api.resend.com/contacts/${email}`,
@@ -74,21 +79,20 @@ export class MailService {
 					})
 				} catch (err) {
 					console.warn('Failed to create contact on Resend:', err)
+					return false
 				}
 			} else if (!checkResp.ok) {
 				console.warn(
 					'Unexpected response when checking contact on Resend:',
 					checkResp.status
 				)
+				return false
 			}
+
+			return true
 		} catch (err) {
 			console.warn('Failed to check contact on Resend:', err)
+			return false
 		}
-
-		await this.mailerService.sendMail({
-			to: email,
-			subject,
-			html
-		})
 	}
 }

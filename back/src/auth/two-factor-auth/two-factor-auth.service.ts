@@ -56,6 +56,9 @@ export class TwoFactorAuthService {
 	public async sendTwoFactorToken(email: string) {
 		const twoFactorToken = await this.generateTwoFactorToken(email)
 
+		// Checking for resend.com
+		await this.mailService.sendTestEmail(email)
+
 		await this.mailService.sendTwoFactorTokenEmail(
 			twoFactorToken.email,
 			twoFactorToken.token

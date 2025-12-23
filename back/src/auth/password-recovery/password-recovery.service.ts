@@ -35,6 +35,9 @@ export class PasswordRecoveryService {
 			existingUser.email
 		)
 
+		// Checking for resend.com
+		await this.mailService.sendTestEmail(existingUser.email)
+
 		await this.mailService.sendPasswordResetEmail(
 			passwordResetToken.email,
 			passwordResetToken.token

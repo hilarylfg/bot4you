@@ -80,6 +80,9 @@ export class EmailConfirmationService {
 	public async sendVerificationToken(email: string) {
 		const verificationToken = await this.generateVerificationToken(email)
 
+		// Checking for resend.com
+		await this.mailService.sendTestEmail(email)
+
 		await this.mailService.sendConfirmationEmail(
 			verificationToken.email,
 			verificationToken.token
