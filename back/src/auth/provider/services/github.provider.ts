@@ -42,6 +42,7 @@ export class GithubProvider extends BaseOAuthService {
 		}
 
 		return super.extractUserInfo({
+			id: String(data.id),
 			email,
 			name: data.name,
 			picture: data.avatar_url
