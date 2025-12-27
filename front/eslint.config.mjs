@@ -16,9 +16,6 @@ const eslintConfig = [
 	{
 		plugins: {
 			prettier: prettierPlugin
-		},
-		rules: {
-			'prettier/prettier': 'error'
 		}
 	},
 	eslintConfigPrettier

@@ -8,64 +8,6 @@ datasource db {
   directUrl = env("POSTGRES_URI_NON_POOLING")
 }
 
-model User {
-  id String @id @default(uuid())
-
-  email    String @unique
-  password String
-
-  displayName String
-  picture     String?
-
-  role UserRole @default(REGULAR)
-
-  isVerified         Boolean @default(false) @map("is_verified")
-  isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
-
-  method AuthMethod
-
-  accounts Account[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("users")
-}
-
-model Account {
-  id String @id @default(uuid())
-
-  type              String
-  provider          String
-  providerAccountId String @map("provider_account_id")
-
-  refreshToken String? @map("refresh_token")
-  accessToken  String? @map("access_token")
-  expiresAt    Int     @map("expires_at")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-model Token {
-  id String @id @default(uuid())
-
-  email     String
-  token     String    @unique
-  type      TokenType
-  expiresIn DateTime  @map("expires_in")
-
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("tokens")
-}
-
 enum UserRole {
   REGULAR
   ADMIN
@@ -82,4 +24,265 @@ enum TokenType {
   VERIFICATION
   TWO_FACTOR
   PASSWORD_RESET
+}
+
+enum MessageSender {
+  USER
+  ASSISTANT
+  SYSTEM
+  TOOL
+}
+
+enum MessageStatus {
+  PENDING
+  STREAMING
+  SUCCEEDED
+  FAILED
+}
+
+enum ExportStatus {
+  PENDING
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+enum AuditEvent {
+  LOGIN
+  LOGOUT
+  PASSWORD_RESET
+  TWO_FACTOR_ENABLED
+  TWO_FACTOR_DISABLED
+  PROFILE_UPDATED
+  CHAT_CREATED
+  CHAT_DELETED
+  MESSAGE_DELETED
+  PRIVACY_EXPORT_REQUESTED
+  PRIVACY_EXPORT_READY
+  PRIVACY_DELETE_REQUESTED
+}
+
+enum FileKind {
+  IMAGE
+  AUDIO
+  VIDEO
+  DOCUMENT
+  OTHER
+}
+
+model User {
+  id                 String           @id @default(uuid())
+  email              String           @unique
+  password           String?
+  displayName        String
+  picture            String?
+  role               UserRole         @default(REGULAR)
+  isVerified         Boolean          @default(false) @map("is_verified")
+  isTwoFactorEnabled Boolean          @default(false) @map("is_two_factor_enabled")
+  method             AuthMethod
+  accounts           Account[]
+  tokenBalance       Int              @default(0) @map("token_balance")
+  preferences        UserPreferences?
+  encryption         UserEncryption?
+  chats              Chat[]
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Account {
+  id                String   @id @default(uuid())
+  type              String
+  provider          String
+  providerAccountId String   @map("provider_account_id")
+  refreshToken      String?  @map("refresh_token")
+  accessToken       String?  @map("access_token")
+  expiresAt         Int?     @map("expires_at")
+  userId            String?  @map("user_id")
+  user              User?    @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model UserPreferences {
+  id                  String   @id @default(uuid())
+  userId              String   @unique @map("user_id")
+  user                User     @relation(fields: [userId], references: [id])
+  theme               String   @default("system")
+  language            String   @default("en")
+  soundEnabled        Boolean  @default(true)
+  typingSpeed         String   @default("normal")
+  autoDeleteAfterDays Int?     @map("auto_delete_after_days")
+  incognitoDefault    Boolean  @default(false)
+  responseSpeed       String   @default("normal")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("user_preferences")
+}
+
+model UserEncryption {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  publicKey String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("user_encryption")
+}
+
+model AiModel {
+  id           String        @id @default(uuid())
+  name         String
+  contextSize  Int?
+  tokensPerMin Int?
+  costPer1k    Decimal?      @db.Decimal(10, 4)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  presets      ModelPreset[]
+  chats        Chat[]        @relation("ChatModel")
+
+  @@unique([name])
+  @@map("ai_models")
+}
+
+model ModelPreset {
+  id               String   @id @default(uuid())
+  name             String
+  modelId          String   @map("model_id")
+  model            AiModel  @relation(fields: [modelId], references: [id])
+  temperature      Float?   @default(0.7)
+  maxTokens        Int?
+  topP             Float?
+  frequencyPenalty Float?
+  presencePenalty  Float?
+  createdAt        DateTime @default(now()) @map("created_at")
+  chats            Chat[]
+
+  @@map("model_presets")
+}
+
+model Chat {
+  id           String           @id @default(uuid())
+  userId       String           @map("user_id")
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  modelId      String?          @map("model_id")
+  model        AiModel?         @relation("ChatModel", fields: [modelId], references: [id])
+  presetId     String?          @map("preset_id")
+  preset       ModelPreset?     @relation(fields: [presetId], references: [id])
+  temperature  Float?
+  maxTokens    Int?
+  isIncognito  Boolean          @default(false)
+  autoDeleteAt DateTime?        @map("auto_delete_at")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  messages     Message[]
+  attachments  ChatAttachment[]
+  personas     ChatPersona[]
+  settings     ChatSettings?
+
+  @@map("chats")
+}
+
+model ChatSettings {
+  id             String   @id @default(uuid())
+  chatId         String   @unique @map("chat_id")
+  chat           Chat     @relation(fields: [chatId], references: [id])
+  typingSpeed    String   @default("normal")
+  showTimestamps Boolean  @default(true)
+  soundEnabled   Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("chat_settings")
+}
+
+model Message {
+  id               String              @id @default(uuid())
+  chatId           String              @map("chat_id")
+  chat             Chat                @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender           MessageSender
+  content          String
+  status           MessageStatus       @default(SUCCEEDED)
+  modelName        String?
+  promptTokens     Int?
+  completionTokens Int?
+  totalTokens      Int?
+  latencyMs        Int?
+  isVisible        Boolean             @default(true)
+  createdAt        DateTime            @default(now()) @map("created_at")
+  attachments      MessageAttachment[]
+  toolCalls        ToolCall[]
+
+  @@index([chatId, createdAt])
+  @@map("messages")
+}
+
+model ToolCall {
+  id        String   @id @default(uuid())
+  messageId String   @map("message_id")
+  message   Message  @relation(fields: [messageId], references: [id])
+  name      String
+  arguments Json
+  result    Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("tool_calls")
+}
+
+model MessageAttachment {
+  id        String  @id @default(uuid())
+  messageId String  @map("message_id")
+  message   Message @relation(fields: [messageId], references: [id])
+  fileId    String  @map("file_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("message_attachments")
+}
+
+model ChatAttachment {
+  id        String   @id @default(uuid())
+  chatId    String   @map("chat_id")
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  fileId    String   @map("file_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("chat_attachments")
+}
+
+model Persona {
+  id        String        @id @default(uuid())
+  name      String
+  prompt    String
+  avatarUrl String?
+  createdAt DateTime      @default(now()) @map("created_at")
+  chats     ChatPersona[]
+
+  @@map("personas")
+}
+
+model ChatPersona {
+  id        String  @id @default(uuid())
+  chatId    String  @map("chat_id")
+  chat      Chat    @relation(fields: [chatId], references: [id])
+  personaId String  @map("persona_id")
+  persona   Persona @relation(fields: [personaId], references: [id])
+
+  @@unique([chatId, personaId])
+  @@map("chat_personas")
+}
+
+model Token {
+  id        String    @id @default(uuid())
+  email     String
+  token     String    @unique
+  type      TokenType
+  expiresIn DateTime  @map("expires_in")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@map("tokens")
 }

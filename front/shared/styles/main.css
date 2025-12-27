@@ -2745,6 +2745,13 @@ svg.lucide {
   flex-direction: column;
   gap: 1.5rem;
 }
+.auth-form__spinner--wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 28rem;
+}
 .auth-form__dialog-content {
   display: flex;
   flex-direction: column;
