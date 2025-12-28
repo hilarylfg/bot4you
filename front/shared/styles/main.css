@@ -219,7 +219,10 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  font-family: var(--font-nunito), sans-serif;
+  font-family: var(--font-nunito), system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   color: var(--text-primary);
   background: var(--bg-primary);
 }
@@ -2451,7 +2454,8 @@ svg.lucide {
 .chat__message-content p:last-child {
   margin-bottom: 0;
 }
-.chat__message-content ul, .chat__message-content ol {
+.chat__message-content ul,
+.chat__message-content ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
 }
@@ -2498,7 +2502,8 @@ svg.lucide {
   margin: 1rem 0;
   font-size: 0.9rem;
 }
-.chat__message-content table th, .chat__message-content table td {
+.chat__message-content table th,
+.chat__message-content table td {
   padding: 0.5rem;
   text-align: left;
 }

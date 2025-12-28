@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import {
 	ChatHeader,
@@ -11,48 +11,87 @@ import {
 	LogoLoaderClient,
 	PromptBox
 } from '@/shared/components'
-import { useChatController } from '@/shared/hooks'
+import { useChatHistory, useChatStreaming } from '@/shared/hooks'
 
 export function Chat() {
 	const t = useTranslations()
 	const {
-		messages,
-		localHistory,
-		streamingResponse,
-		isLoaded,
-		isLoading,
-		error,
-		setIsLoading,
-		setError,
-		submitUserMessage,
-		startResponse,
-		completeResponse,
-		clearAll
-	} = useChatController()
+		messages: localMessages,
+		addMessage,
+		clearHistory
+	} = useChatHistory()
+	const [error, setError] = useState<string | null>(null)
+	const previousStreamingRef = useRef(false)
+	const accumulatedRef = useRef('')
 
-	const onConfirmClear = useCallback(() => {
-		if (confirm(t('common.messages.clearConfirm'))) {
-			clearAll()
+	const {
+		isStreaming,
+		accumulated,
+		sendMessage,
+		error: streamError
+	} = useChatStreaming({
+		model: 'google/gemma-3-27b-it:free'
+	})
+
+	useEffect(() => {
+		if (streamError) {
+			setError(streamError)
 		}
-	}, [t, clearAll])
+	}, [streamError])
+
+	useEffect(() => {
+		const streamingFinished = previousStreamingRef.current && !isStreaming
+		if (
+			streamingFinished &&
+			accumulated &&
+			accumulated !== accumulatedRef.current
+		) {
+			addMessage(accumulated, 'assistant')
+			accumulatedRef.current = accumulated
+		}
+
+		previousStreamingRef.current = isStreaming
+	}, [isStreaming, accumulated, addMessage])
+
+	const handleMessageSubmit = useCallback(
+		(text: string) => {
+			addMessage(text, 'user')
+			accumulatedRef.current = ''
+
+			sendMessage({
+				role: 'user',
+				parts: [{ type: 'text', text }]
+			})
+		},
+		[sendMessage, addMessage]
+	)
+
+	const handleClearAll = useCallback(() => {
+		if (confirm(t('common.messages.clearConfirm'))) {
+			clearHistory()
+			accumulatedRef.current = ''
+		}
+	}, [t, clearHistory])
 
 	return (
 		<>
-			<LogoLoaderClient isLoading={!isLoaded} />
+			<LogoLoaderClient isLoading={false} />
 			<div className='chat'>
 				<ChatHeader
-					hasMessages={messages.length > 0}
-					onClear={onConfirmClear}
-					error={error}
+					hasMessages={localMessages.length > 0}
+					onClear={handleClearAll}
+					error={error ?? null}
 				/>
 
-				{messages.length === 0 ? (
+				{localMessages.length === 0 && !isStreaming ? (
 					<ChatWelcome />
 				) : (
 					<ChatHistory
-						messages={messages}
-						isLoading={isLoading}
-						streamingResponse={streamingResponse}
+						messages={localMessages}
+						isLoading={isStreaming}
+						streamingResponse={
+							isStreaming ? accumulated : undefined
+						}
 						showTypingPlaceholder={true}
 					/>
 				)}
@@ -60,13 +99,8 @@ export function Chat() {
 				<div className='chat__form-container'>
 					<Container>
 						<PromptBox
-							setIsLoading={setIsLoading}
-							setError={setError}
-							isLoading={isLoading}
-							onMessageSubmit={submitUserMessage}
-							onResponseStart={startResponse}
-							onResponseComplete={completeResponse}
-							chatHistory={localHistory}
+							isLoading={isStreaming}
+							onMessageSubmit={handleMessageSubmit}
 						/>
 					</Container>
 				</div>

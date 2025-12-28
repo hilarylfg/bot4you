@@ -2,9 +2,11 @@
 
 import { Copy, RefreshCcw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { memo } from 'react'
 import { toast } from 'sonner'
 
-import { Button, MarkdownMessage } from '@/shared/components'
+import { MarkdownMessage } from './markdown-message'
+import { Button } from '../ui/button'
 import { useInDev } from '@/shared/hooks'
 import { ChatMessage } from '@/shared/types'
 import { copyToClipboard, formatTime } from '@/shared/utils'
@@ -14,7 +16,7 @@ interface Props {
 	isLoading: boolean
 }
 
-export function ChatMessageItem({ message, isLoading }: Props) {
+function ChatMessageItemComponent({ message, isLoading }: Props) {
 	const t = useTranslations()
 
 	const handleCopy = async () => {
@@ -67,3 +69,6 @@ export function ChatMessageItem({ message, isLoading }: Props) {
 		</div>
 	)
 }
+
+export const ChatMessageItem = memo(ChatMessageItemComponent)
+ChatMessageItem.displayName = 'ChatMessageItem'

@@ -14,20 +14,19 @@ import { ChatMessage } from '@/shared/types'
 interface Props {
 	messages: ChatMessage[]
 	isLoading: boolean
-	streamingResponse: string
+	streamingResponse?: string
 	showTypingPlaceholder: boolean
 }
 
 export function ChatHistory({
 	messages,
 	isLoading,
-	streamingResponse,
+	streamingResponse = '',
 	showTypingPlaceholder
 }: Props) {
 	const t = useTranslations()
 
 	const { scrollAreaRef, messagesEndRef, handleScroll } = useChatAutoScroll({
-		isLoading,
 		streamingResponse,
 		messages
 	})

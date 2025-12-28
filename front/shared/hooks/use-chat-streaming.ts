@@ -1,107 +1,70 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
-
-import type { ChatMessage } from '@/shared/types'
-import { openRouterStream } from '@/shared/utils'
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport, type TextPart } from 'ai'
 
 interface UseChatStreamingArgs {
-	model: string
-	apiKey?: string
+	model?: string
 	endpoint?: string
-	referer?: string
 }
 
-interface StartStreamOptions {
-	prompt: string
-	history: ChatMessage[]
-	onStart?: () => void
-	onDelta?: (accumulated: string, delta: string) => void
-	onComplete?: (final: string) => void
-	onError?: (err: Error) => void
-	signal?: AbortSignal
-}
+export function useChatStreaming({ model, endpoint }: UseChatStreamingArgs) {
+	const resolvedEndpoint =
+		endpoint ||
+		(process.env.NEXT_PUBLIC_SERVER_URL
+			? `${process.env.NEXT_PUBLIC_SERVER_URL}/chat/stream`
+			: '/api/chat/stream')
 
-export function useChatStreaming({
-	apiKey = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || '',
-	model,
-	endpoint,
-	referer
-}: UseChatStreamingArgs) {
-	const [isStreaming, setIsStreaming] = useState(false)
-	const [accumulated, setAccumulated] = useState('')
-	const startCallIdRef = useRef(0)
+	const { messages, sendMessage, status, error, setMessages } = useChat({
+		transport: new DefaultChatTransport({
+			api: resolvedEndpoint,
+			prepareSendMessagesRequest: ({ messages }) => {
+				const lastMessage = messages[messages.length - 1]
+				const lastText = lastMessage.parts
+					.filter((p): p is TextPart => p.type === 'text')
+					.map(p => p.text)
+					.join('')
 
-	const start = useCallback(
-		async ({
-			prompt,
-			history,
-			onStart,
-			onDelta,
-			onComplete,
-			onError,
-			signal
-		}: StartStreamOptions) => {
-			if (!apiKey) {
-				const err = new Error('OpenRouter API key is missing')
-				onError?.(err)
-				return
-			}
+				const history = messages.slice(0, -1).map(m => ({
+					role: m.role,
+					content: m.parts
+						.filter((p): p is TextPart => p.type === 'text')
+						.map(p => p.text)
+						.join('')
+				}))
 
-			setIsStreaming(true)
-			setAccumulated('')
-			const callId = ++startCallIdRef.current
-
-			try {
-				const messages = [
-					...history.map(m => ({ role: m.role, content: m.content })),
-					{ role: 'user', content: prompt }
-				]
-
-				const { done } = await openRouterStream({
-					apiKey,
-					model,
-					endpoint,
-					referer,
-					messages,
-					signal,
-					onStart: () => {
-						if (startCallIdRef.current !== callId) return
-						onStart?.()
-					},
-					onDelta: (delta, full) => {
-						if (startCallIdRef.current !== callId) return
-						setAccumulated(full)
-						onDelta?.(full, delta)
-					},
-					onComplete: final => {
-						if (startCallIdRef.current !== callId) return
-						setAccumulated(final)
-						setIsStreaming(false)
-						onComplete?.(final)
-					},
-					onError: err => {
-						if (startCallIdRef.current !== callId) return
-						setIsStreaming(false)
-						onError?.(err)
+				return {
+					body: {
+						prompt: lastText,
+						model,
+						history
 					}
-				})
-
-				await done
-			} catch (err) {
-				if (startCallIdRef.current !== callId) return
-				setIsStreaming(false)
-				if ((err as Error)?.name !== 'AbortError') {
-					onError?.(err as Error)
 				}
 			}
-		},
-		[apiKey, model, endpoint, referer]
-	)
+		})
+	})
+
+	const isStreaming = status === 'streaming'
+	const isLoading = isStreaming
+
+	const lastAssistantMessage = [...messages]
+		.reverse()
+		.find(m => m.role === 'assistant')
+
+	const accumulated = lastAssistantMessage
+		? lastAssistantMessage.parts
+				.filter((p): p is TextPart => p.type === 'text')
+				.map(p => p.text)
+				.join('')
+		: ''
 
 	return {
+		messages,
 		isStreaming,
+		isLoading,
 		accumulated,
-		start
+		error: error?.message,
+		sendMessage,
+		setMessages
 	}
 }

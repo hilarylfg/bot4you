@@ -2,81 +2,21 @@
 
 import { Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import {
-	Dispatch,
-	FormEvent,
-	KeyboardEvent,
-	SetStateAction,
-	useCallback,
-	useState
-} from 'react'
+import { FormEvent, KeyboardEvent, useState } from 'react'
 
 import { Button, PromptTextarea } from '@/shared/components'
-import { useChatStreaming } from '@/shared/hooks'
-import { ChatMessage } from '@/shared/types'
 
 interface PromptBoxProps {
-	setIsLoading: Dispatch<SetStateAction<boolean>>
-	setError: Dispatch<SetStateAction<string | null>>
 	isLoading: boolean
-	onMessageSubmit?: (message: string) => void
-	onResponseStart?: (partial: string) => void
-	onResponseComplete?: (final: string) => void
-	chatHistory?: ChatMessage[]
-	enableAbort?: boolean
+	onMessageSubmit: (message: string) => void
 }
 
-export function PromptBox({
-	setIsLoading,
-	setError,
-	isLoading,
-	onMessageSubmit,
-	onResponseStart,
-	onResponseComplete,
-	chatHistory = []
-}: PromptBoxProps) {
+export function PromptBox({ isLoading, onMessageSubmit }: PromptBoxProps) {
 	const t = useTranslations()
 	const [input, setInput] = useState('')
 
-	const { isStreaming, start } = useChatStreaming({
-		model: 'google/gemma-3-27b-it:free',
-		referer:
-			typeof window !== 'undefined' ? window.location.origin : undefined
-	})
-
-	const busy = isLoading || isStreaming
+	const busy = isLoading
 	const canSend = !busy && input.trim().length > 0
-
-	const beginStream = useCallback(
-		(prompt: string) => {
-			start({
-				prompt,
-				history: chatHistory,
-				onStart: () => {
-					onResponseStart?.('')
-				},
-				onDelta: accumulated => {
-					onResponseStart?.(accumulated)
-				},
-				onComplete: final => {
-					onResponseComplete?.(final)
-					setIsLoading(false)
-				},
-				onError: err => {
-					setError(err.message)
-					setIsLoading(false)
-				}
-			})
-		},
-		[
-			start,
-			chatHistory,
-			onResponseStart,
-			onResponseComplete,
-			setIsLoading,
-			setError
-		]
-	)
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault()
@@ -84,11 +24,7 @@ export function PromptBox({
 
 		const prompt = input.trim()
 		setInput('')
-		onMessageSubmit?.(prompt)
-
-		setIsLoading(true)
-		setError(null)
-		beginStream(prompt)
+		onMessageSubmit(prompt)
 	}
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {

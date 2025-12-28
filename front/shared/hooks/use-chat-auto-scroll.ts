@@ -5,22 +5,20 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ChatMessage } from '@/shared/types'
 
 interface UseAutoScrollOptions {
-	isLoading: boolean
-	streamingResponse: string
+	streamingResponse?: string
 	messages: ChatMessage[]
 }
 
 export function useChatAutoScroll({
-	isLoading,
-	streamingResponse,
+	streamingResponse = '',
 	messages
 }: UseAutoScrollOptions) {
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 	const [shouldAutoScroll, setShouldAutoScroll] = useState(true)
-	const [isUserScrolling, setIsUserScrolling] = useState(false)
 	const lastMessageCountRef = useRef(messages.length)
 	const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const previousStreamingRef = useRef(false)
 
 	const scrollToBottom = useCallback(
 		(behavior: ScrollBehavior = 'smooth') => {
@@ -46,11 +44,14 @@ export function useChatAutoScroll({
 
 		const atBottom = isAtBottom()
 		setShouldAutoScroll(atBottom)
+	}, [isAtBottom])
 
-		if (isLoading || streamingResponse) {
-			setIsUserScrolling(!atBottom)
+	useEffect(() => {
+		if (messages.length > 0) {
+			scrollToBottom('auto')
+			lastMessageCountRef.current = messages.length
 		}
-	}, [isAtBottom, isLoading, streamingResponse])
+	}, [])
 
 	useEffect(() => {
 		if (shouldAutoScroll && messages.length > lastMessageCountRef.current) {
@@ -60,41 +61,29 @@ export function useChatAutoScroll({
 	}, [messages.length, shouldAutoScroll, scrollToBottom])
 
 	useEffect(() => {
-		if (isLoading && !streamingResponse) {
-			setShouldAutoScroll(true)
-			setIsUserScrolling(false)
+		if (streamingResponse && shouldAutoScroll) {
 			scrollToBottom()
 		}
-	}, [isLoading, streamingResponse, scrollToBottom])
+	}, [streamingResponse, shouldAutoScroll, scrollToBottom])
 
 	useEffect(() => {
-		if (streamingResponse && shouldAutoScroll && !isUserScrolling) {
-			scrollToBottom()
-		}
-	}, [streamingResponse, shouldAutoScroll, isUserScrolling, scrollToBottom])
-
-	useEffect(() => {
-		const wasStreaming = streamingResponse.length > 0
-		const justFinished = !isLoading && !streamingResponse && wasStreaming
+		const wasStreaming = previousStreamingRef.current
+		const justFinished = wasStreaming && !streamingResponse
 
 		if (justFinished && shouldAutoScroll) {
 			completionTimeoutRef.current = setTimeout(() => {
 				scrollToBottom()
-			}, 100)
+			}, 120)
 		}
+
+		previousStreamingRef.current = Boolean(streamingResponse)
 
 		return () => {
 			if (completionTimeoutRef.current) {
 				clearTimeout(completionTimeoutRef.current)
 			}
 		}
-	}, [isLoading, streamingResponse, shouldAutoScroll, scrollToBottom])
-
-	useEffect(() => {
-		if (!isLoading && !streamingResponse) {
-			setIsUserScrolling(false)
-		}
-	}, [isLoading, streamingResponse])
+	}, [streamingResponse, shouldAutoScroll, scrollToBottom])
 
 	return {
 		scrollAreaRef,

@@ -1,5 +1,4 @@
 export { useChatAutoScroll } from './use-chat-auto-scroll'
-export { useChatController } from './use-chat-controller'
 export { useChatHistory } from './use-chat-history'
 export { useChatStreaming } from './use-chat-streaming'
 export { useDevice } from './use-device'
